@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,500;0,600;1,500&display=swap');
+
+:root {
+  --navy: #070b14;
+  --navy-elevated: #0d1320;
+  --navy-soft: #121a2b;
+  --navy-border: rgba(148, 163, 184, 0.16);
+  --off-white: #f4f6f9;
+  --white: #ffffff;
+  --muted: #94a3b8;
+  --muted-strong: #cbd5e1;
+  --text: #e8eef7;
+  --accent: #22d3ee;
+  --accent-strong: #38bdf8;
+  --accent-deep: #0ea5e9;
+  --accent-soft: rgba(34, 211, 238, 0.12);
+  --accent-glow: rgba(56, 189, 248, 0.22);
+  --success: #34d399;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 48px rgba(0, 0, 0, 0.28);
+  --container: 1140px;
+  --header-h: 76px;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--navy);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 1rem;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+p {
+  color: var(--muted);
+}
+
+.container {
+  width: min(92%, var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  width: min(92%, var(--container));
+  margin: 0 auto;
+  padding: 5.5rem 0;
+}
+
+.section--flush {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
+
+.gridSection {
+  display: grid;
+  align-items: center;
+  gap: 3rem;
+  margin-bottom: 0;
+}
+
+@media (min-width: 900px) {
+  .gridSection {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 4rem;
+  }
+}
+
+.sectionPic {
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  position: relative;
+}
+
+.sectionPic img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.1rem;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 1.4rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.brand-mark {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.headline,
+.sectionHeader {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.headline {
+  font-size: clamp(2.35rem, 5.2vw, 3.85rem);
+  margin-bottom: 1.15rem;
+}
+
+.sectionHeader {
+  font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+  margin-bottom: 1rem;
+}
+
+.sub-headline,
+.sectionPara {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 36rem;
+}
+
+.sectionPara {
+  margin-bottom: 2rem;
+}
+
+.accent-text {
+  color: var(--accent-strong);
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+}
+
+.darkPara {
+  color: var(--muted);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.8rem 1.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--navy-border);
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--white);
+  transition: transform 0.25s var(--ease), background 0.25s var(--ease),
+    border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), color 0.25s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 211, 238, 0.45);
+  background: var(--accent-soft);
+}
+
+.btn:focus-visible,
+.nav-link a:focus-visible,
+.sociallink:focus-visible,
+.eachLink:focus-visible,
+.contactInput:focus-visible,
+.indicator:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.btn-primary,
+.primaryBtn,
+.btn1 {
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  border-color: transparent;
+  color: var(--navy);
+  box-shadow: 0 10px 28px var(--accent-glow);
+}
+
+.btn-primary:hover,
+.primaryBtn:hover,
+.btn1:hover {
+  background: linear-gradient(135deg, var(--accent), #67e8f9);
+  border-color: transparent;
+  color: var(--navy);
+  box-shadow: 0 14px 34px rgba(34, 211, 238, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--navy-border);
+  color: var(--white);
+}
+
+.btn-ghost:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: var(--accent-soft);
+  color: var(--white);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.btnContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.85rem;
+}
+
+.card {
+  background: var(--navy-elevated);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease), background 0.3s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(180deg, rgba(18, 26, 43, 0.95), rgba(13, 19, 32, 0.98));
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal,
+  .btn,
+  .card,
+  .bouncepic img,
+  .nav,
+  .hero-glow,
+  .hero-orb {
+    transition: none !important;
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

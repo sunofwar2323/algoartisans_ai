@@ -1,0 +1,402 @@
+/* =========================================================
+   Mobile / responsive — site-wide
+   ========================================================= */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prefer crisp image scaling */
+.hero-visual__img,
+.media-frame,
+.chain-orbit__img,
+.brand-logo,
+.about-logo,
+.founder-card img {
+  image-rendering: auto;
+  -ms-interpolation-mode: bicubic;
+}
+
+@media (max-width: 899px) {
+  :root {
+    --header-h: 64px;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  .section {
+    width: min(92%, var(--container));
+    padding: 3.25rem 0;
+  }
+
+  .sectionHeader {
+    font-size: clamp(1.55rem, 6.5vw, 2.1rem);
+    line-height: 1.2;
+  }
+
+  .headline {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
+  }
+
+  .sub-headline,
+  .sectionPara {
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: none;
+  }
+
+  .site-header__inner {
+    padding-inline: 4vw;
+    min-height: var(--header-h);
+  }
+
+  .brand-logo {
+    height: 44px;
+    width: auto;
+    max-width: 140px;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: auto;
+    padding: 1.25rem 0 2.5rem;
+  }
+
+  .hero__inner {
+    width: min(92%, var(--container));
+    gap: 1.75rem;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    order: 1;
+    text-align: left;
+  }
+
+  .hero-visual {
+    order: 2;
+    max-width: min(88vw, 360px);
+    margin: 0.5rem auto 0;
+  }
+
+  .hero-visual__img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .hero-meta {
+    display: none;
+  }
+
+  .hero .sub-headline {
+    font-size: 0.98rem;
+  }
+
+  .hero-support {
+    font-size: 0.9rem;
+  }
+
+  /* Trust */
+  .trust-strip__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 0.5rem;
+    padding: 1rem 0;
+  }
+
+  .trust-strip__inner p {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    line-height: 1.35;
+  }
+
+  /* Cinematic intro */
+  .cinematic-intro {
+    padding: 3rem 0;
+  }
+
+  .statement-line {
+    font-size: clamp(1.55rem, 7vw, 2.1rem);
+  }
+
+  /* Pipeline — stack */
+  .pipeline-track {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.85rem;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  .pipeline-stage {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .pipeline-signal {
+    display: none;
+  }
+
+  /* Collab */
+  .collab-split {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .collab-center {
+    order: -1;
+  }
+
+  /* Workforce teaser */
+  .workforce-teaser__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* About preview */
+  .intro-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Newsletter */
+  .newsletter-chain__inner {
+    grid-template-columns: 1fr;
+    padding: 1.35rem 1.1rem;
+    gap: 1.5rem;
+  }
+
+  .chain-orbit {
+    width: min(70%, 260px);
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newsletter-form .contactInput,
+  .newsletter-form .btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px; /* prevent iOS zoom */
+  }
+
+  /* Meet office */
+  .meet-office {
+    padding: 3rem 0 3.5rem;
+  }
+
+  .meet-office__intro {
+    width: min(92%, 640px);
+    margin-bottom: 1.5rem;
+  }
+
+  .meet-viewport {
+    min-height: 420px;
+    border-radius: var(--radius-lg);
+  }
+
+  .meet-hud {
+    font-size: 0.58rem;
+    gap: 0.4rem;
+  }
+
+  .meet-hint {
+    font-size: 0.8rem;
+    padding-inline: 0.5rem;
+  }
+
+  .meet-a11y {
+    gap: 0.4rem;
+  }
+
+  .meet-a11y button {
+    flex: 1 1 calc(50% - 0.4rem);
+    min-width: 0;
+  }
+
+  .meet-copy {
+    width: min(92%, 640px);
+    margin-top: 2rem;
+  }
+
+  /* Workforce HQ */
+  .whq {
+    padding: 4.25rem 0 2.5rem;
+  }
+
+  .whq-intro {
+    width: min(92%, 640px);
+    margin-bottom: 1.25rem;
+  }
+
+  .whq-pin {
+    width: min(94%, 1180px);
+  }
+
+  .whq-viewport {
+    min-height: 440px;
+    border-radius: var(--radius-lg);
+  }
+
+  .whq-hud {
+    font-size: 0.58rem;
+  }
+
+  .whq-a11y button {
+    flex: 1 1 calc(50% - 0.4rem);
+  }
+
+  .whq-climax {
+    width: min(92%, 640px);
+    margin-top: 2rem;
+  }
+
+  .whq-climax h2 {
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+  }
+
+  /* Agent roster cards */
+  .agent-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Founders */
+  .founders-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem;
+  }
+
+  .founder-card {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .founder-card img {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Contact */
+  .project-init__grid,
+  .contact-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer */
+  .footerlinksContainer {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .footerAboutus {
+    grid-column: 1 / -1;
+  }
+
+  .footerAboutus img {
+    height: 56px;
+  }
+
+  .joinSection {
+    padding: 2.5rem 0;
+    gap: 1.25rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .cta-actions .btn {
+    width: 100%;
+  }
+
+  .system-ready__inner {
+    padding-inline: 1rem;
+  }
+
+  .system-ready__title {
+    font-size: clamp(1.5rem, 6.5vw, 2.1rem);
+  }
+
+  /* Buttons & inputs — touch friendly */
+  .btn {
+    min-height: 48px;
+  }
+
+  .contactInput,
+  select.contactInput,
+  textarea.contactInput {
+    font-size: 16px;
+    width: 100%;
+  }
+
+  /* Office about sample (if present) */
+  .office-section--about .office-viewport {
+    min-height: 360px;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 599px) {
+  .trust-strip__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .meet-mobile-nav button,
+  .whq-mobile-nav button {
+    font-size: 0.55rem;
+    letter-spacing: 0.03em;
+    padding: 0.35rem 0.15rem;
+  }
+
+  .hero-brand {
+    font-size: clamp(1.85rem, 9vw, 2.35rem);
+  }
+
+  .whq-core__title {
+    font-size: 0.95rem;
+  }
+
+  .whq-pipeline span {
+    font-size: 0.45rem;
+  }
+}
+
+@media (max-width: 374px) {
+  .section {
+    padding: 2.75rem 0;
+  }
+
+  .brand-logo {
+    max-width: 120px;
+    height: 40px;
+  }
+}
+
+/* Safe areas (notched phones) */
+@supports (padding: max(0px)) {
+  .site-header__inner {
+    padding-left: max(4vw, env(safe-area-inset-left));
+    padding-right: max(4vw, env(safe-area-inset-right));
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

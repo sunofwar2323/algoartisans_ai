@@ -1,0 +1,86 @@
+/* SEO / a11y helpers — non-visual or lightly styled, no redesign */
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 200;
+  padding: 0.65rem 1rem;
+  background: var(--accent, #22d3ee);
+  color: var(--navy, #070b14);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid var(--white, #fff);
+  outline-offset: 2px;
+}
+
+.seo-entity {
+  width: min(92%, var(--container, 1140px));
+  margin: 2.5rem auto;
+  padding: 1.35rem 1.4rem;
+  border-left: 2px solid var(--accent, #22d3ee);
+  background: rgba(14, 165, 233, 0.06);
+  border-radius: 0 var(--radius-md, 14px) var(--radius-md, 14px) 0;
+}
+
+.seo-entity h2 {
+  font-family: var(--font-serif, Georgia, serif);
+  color: var(--white, #fff);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  margin: 1rem 0 0.4rem;
+  line-height: 1.3;
+}
+
+.seo-entity h2:first-child {
+  margin-top: 0;
+}
+
+.seo-entity p,
+.seo-entity li {
+  color: var(--muted-strong, #cbd5e1);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.seo-entity ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.15rem;
+  list-style: disc;
+}
+
+.seo-entity a {
+  color: var(--accent-strong, #38bdf8);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.breadcrumbs {
+  width: min(92%, var(--container, 1140px));
+  margin: 1rem auto 0;
+  font-size: 0.8rem;
+  color: var(--muted, #94a3b8);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.45rem;
+  opacity: 0.55;
+}
+
+.breadcrumbs a:hover {
+  color: var(--accent, #22d3ee);
+}

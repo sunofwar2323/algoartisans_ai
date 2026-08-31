@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow non-public / utility paths if added later
+Disallow: /Team/
+Disallow: /*.md$
+
+Sitemap: https://www.algoartisans.com/sitemap.xml
