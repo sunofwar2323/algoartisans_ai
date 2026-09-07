@@ -364,7 +364,7 @@
         <p class="engine-desc">${s.desc}</p>
         <ul class="capability-list">${s.caps.map((c) => `<li>${c}</li>`).join("")}</ul>
         ${s.highlight ? `<p class="service-highlight">${s.highlight}</p>` : ""}
-        <a class="text-link" href="./contact.html">${s.cta}</a>
+        <a class="text-link" href="./start-project.html">${s.cta}</a>
       </article>`
       )
       .join("");

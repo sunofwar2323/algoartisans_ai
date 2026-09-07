@@ -1,5 +1,6 @@
 /index.html    /    301!
 /home          /    301
-/about         /aboutus.html    302
-/ai-workforce  /workforce.html  302
-/contact       /contact.html    302
+/about         /aboutus    302
+/ai-workforce  /workforce    302
+/start-a-project  /start-project    302
+/project       /start-project    302

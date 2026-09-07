@@ -27,8 +27,9 @@
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/home", "destination": "/", "permanent": true },
-    { "source": "/ai-workforce", "destination": "/workforce.html", "permanent": false },
-    { "source": "/about", "destination": "/aboutus.html", "permanent": false },
-    { "source": "/contact", "destination": "/contact.html", "permanent": false }
+    { "source": "/ai-workforce", "destination": "/workforce", "permanent": false },
+    { "source": "/about", "destination": "/aboutus", "permanent": false },
+    { "source": "/start-a-project", "destination": "/start-project", "permanent": false },
+    { "source": "/project", "destination": "/start-project", "permanent": false }
   ]
 }
