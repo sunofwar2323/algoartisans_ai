@@ -27,29 +27,44 @@
   const onCleanup = (fn) => cleanups.push(fn);
 
   /* =========================================================
-     Nav
+     Nav — mobile menu
      ========================================================= */
   const barContainer = document.getElementById("barContainer");
-  const bar = document.getElementById("bar");
   const nav = document.getElementById("nav");
   const overlay = document.getElementById("navOverlay");
   const header = document.querySelector(".site-header");
   const navProgress = document.getElementById("navProgress");
 
+  const isMenuOpen = () => document.body.classList.contains("menu-open");
+
   const setMenuOpen = (open) => {
-    if (!nav || !bar) return;
+    if (!nav || !barContainer) return;
+    if (mqDesktop.matches) open = false;
+
+    document.body.classList.toggle("menu-open", open);
     nav.classList.toggle("showNav", open);
-    bar.className = open ? "fa-solid fa-xmark" : "fa-solid fa-bars";
-    barContainer?.setAttribute("aria-expanded", String(open));
-    barContainer?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    barContainer.classList.toggle("is-open", open);
+    barContainer.setAttribute("aria-expanded", String(open));
+    barContainer.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+
     if (overlay) {
       overlay.classList.toggle("is-open", open);
       overlay.hidden = !open;
     }
+
     document.body.style.overflow = open ? "hidden" : "";
+    document.documentElement.style.overflow = open ? "hidden" : "";
+
+    if (!open && nav.contains(document.activeElement)) {
+      barContainer.focus({ preventScroll: true });
+    }
   };
 
-  barContainer?.addEventListener("click", () => setMenuOpen(!nav.classList.contains("showNav")));
+  barContainer?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setMenuOpen(!isMenuOpen());
+  });
   overlay?.addEventListener("click", () => setMenuOpen(false));
   nav?.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
@@ -57,10 +72,16 @@
     });
   });
   const onEsc = (e) => {
-    if (e.key === "Escape") setMenuOpen(false);
+    if (e.key === "Escape" && isMenuOpen()) setMenuOpen(false);
   };
   document.addEventListener("keydown", onEsc);
   onCleanup(() => document.removeEventListener("keydown", onEsc));
+
+  const onNavMq = () => {
+    if (mqDesktop.matches && isMenuOpen()) setMenuOpen(false);
+  };
+  mqDesktop.addEventListener?.("change", onNavMq);
+  onCleanup(() => mqDesktop.removeEventListener?.("change", onNavMq));
 
   /* =========================================================
      Page transition (short)

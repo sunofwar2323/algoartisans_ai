@@ -115,8 +115,12 @@
           </a>
         </li>
       </ul>
-      <button type="button" id="barContainer" aria-label="Open menu" aria-controls="nav" aria-expanded="false">
-        <i id="bar" class="fa-solid fa-bars" aria-hidden="true"></i>
+      <button type="button" id="barContainer" class="menu-toggle" aria-label="Open menu" aria-controls="nav" aria-expanded="false">
+        <span class="menu-toggle__box" aria-hidden="true">
+          <span class="menu-toggle__line"></span>
+          <span class="menu-toggle__line"></span>
+          <span class="menu-toggle__line"></span>
+        </span>
       </button>
     </div>
   </header>
@@ -401,21 +405,35 @@
       </div>
       <div class="founders-grid">
         <article class="founder-card">
-          <img src="./images/gautam.png" width="400" height="500" alt="Gautam Sunuwar, Co-Founder of AlgoArtisans"
-            loading="lazy" decoding="async">
+          <div class="founder-photo">
+            <img src="./images/shreejana.png" width="400" height="500" alt="Shreejana Sunuwar, CEO &amp; Strategy of AlgoArtisans"
+              loading="lazy" decoding="async">
+          </div>
           <div>
-            <h3>Gautam Sunuwar</h3>
-            <p class="founder-title">Co-Founder</p>
-            <p class="founder-focus">Technology &amp; Strategy</p>
+            <h3>Shreejana Sunuwar</h3>
+            <p class="founder-title">CEO &amp; Strategy</p>
+            <p class="founder-focus">Finance &amp; Operational</p>
           </div>
         </article>
         <article class="founder-card">
-          <img src="./images/om.png" width="400" height="500" alt="Om, Co-Founder of AlgoArtisans" loading="lazy"
-            decoding="async">
+          <div class="founder-photo">
+            <img src="./images/om.png" width="400" height="500" alt="Om, Co-Founder of AlgoArtisans" loading="lazy"
+              decoding="async">
+          </div>
           <div>
             <h3>Om</h3>
             <p class="founder-title">Co-Founder</p>
             <p class="founder-focus">Technology &amp; Product</p>
+          </div>
+        </article>
+        <article class="founder-card">
+          <div class="founder-photo">
+            <img src="./images/gautam.png" width="400" height="500" alt="Gautam Sunuwar, Researcher at AlgoArtisans"
+              loading="lazy" decoding="async">
+          </div>
+          <div>
+            <h3>Gautam Sunuwar</h3>
+            <p class="founder-title">Researcher</p>
           </div>
         </article>
       </div>

@@ -1249,28 +1249,19 @@ body.has-custom-cursor button {
     top: auto;
   }
 
-  .nav.showNav {
-    padding-top: 4.5rem;
-  }
-
-  .nav-link {
-    margin-bottom: 0.35rem;
-  }
-
   .nav-link a {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
+    min-height: 48px;
   }
 
   .nav-cta .btn-nav {
-    min-height: 48px;
+    min-height: 52px;
   }
 
   .project-form .contactInput,
   .project-form select.contactInput,
   .btn,
-  #barContainer {
+  #barContainer,
+  .menu-toggle {
     min-height: 48px;
   }
 

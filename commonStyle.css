@@ -320,12 +320,24 @@ p {
   .card,
   .bouncepic img,
   .nav,
+  .navLogo,
+  .nav-link,
+  .nav-cta,
+  .sociallinkContainer,
+  .menu-toggle__line,
   .hero-glow,
   .hero-orb {
     transition: none !important;
     animation: none !important;
   }
   .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .nav.showNav .navLogo,
+  .nav.showNav .nav-link,
+  .nav.showNav .nav-cta,
+  .nav.showNav .sociallinkContainer {
     opacity: 1;
     transform: none;
   }
