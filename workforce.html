@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="motion.css">
   <link rel="stylesheet" href="workforce-hq.css">
+  <link rel="stylesheet" href="agent-roster.css">
   <link rel="stylesheet" href="responsive.css">
   <link rel="stylesheet" href="seo.css">
   <script src="https://kit.fontawesome.com/aa7454d09f.js" crossorigin="anonymous" defer></script>
@@ -281,6 +282,9 @@
             </div>
 
             <aside class="whq-panel" id="whqPanel" aria-live="polite">
+              <div class="whq-panel__portrait" id="whqPanelPortrait" hidden>
+                <img id="whqPanelPortraitImg" src="./images/Atlast.png" width="320" height="280" alt="" loading="lazy" decoding="async">
+              </div>
               <p class="whq-panel__id" id="whqPanelId">AGENT_01</p>
               <h3 class="whq-panel__name" id="whqPanelName">ATLAS</h3>
               <p class="whq-panel__hello" id="whqPanelHello"></p>
@@ -319,48 +323,213 @@
       </div>
     </section>
 
-    <section class="section agent-detail-section">
-      <div class="section-intro">
-        <p class="eyebrow">Agent roster</p>
-        <h2 class="sectionHeader">Roles inside the workforce.</h2>
-        <p class="sectionPara">Each agent has a defined domain. The interactive workspace above enhances discovery—these descriptions are the crawlable source of truth.</p>
-      </div>
-      <div class="agent-detail-grid">
-        <article class="agent-detail-card">
-          <p class="agent-domain">Project Intelligence</p>
-          <h3>Atlas</h3>
-          <p class="agent-role">AI Project Manager</p>
-          <p>Plans projects, organizes tasks, tracks deadlines, coordinates workflows and keeps execution moving across the office.</p>
-          <ul class="capability-list"><li>Planning</li><li>Coordination</li><li>Deadlines</li><li>Execution</li></ul>
-        </article>
-        <article class="agent-detail-card">
-          <p class="agent-domain">Systems Intelligence</p>
-          <h3>Nova</h3>
-          <p class="agent-role">AI Systems Architect</p>
-          <p>Designs technical architecture, evaluates solutions, reviews structure and turns requirements into scalable systems.</p>
-          <ul class="capability-list"><li>Architecture</li><li>Evaluation</li><li>Code Review</li><li>Scalability</li></ul>
-        </article>
-        <article class="agent-detail-card">
-          <p class="agent-domain">Product Engineering</p>
-          <h3>Forge</h3>
-          <p class="agent-role">AI Software Engineer</p>
-          <p>Supports frontend, backend, integrations, testing and deployment across the development workflow.</p>
-          <ul class="capability-list"><li>Frontend</li><li>Backend</li><li>Integrations</li><li>Deployment</li></ul>
-        </article>
-        <article class="agent-detail-card">
-          <p class="agent-domain">Growth Intelligence</p>
-          <h3>Vanta</h3>
-          <p class="agent-role">AI Sales &amp; Marketing</p>
-          <p>Researches markets, identifies opportunities, manages leads, supports proposals and drives growth signals.</p>
-          <ul class="capability-list"><li>Markets</li><li>Leads</li><li>Proposals</li><li>Growth</li></ul>
-        </article>
-        <article class="agent-detail-card">
-          <p class="agent-domain">Financial Intelligence</p>
-          <h3>Finn</h3>
-          <p class="agent-role">AI Finance &amp; Operations</p>
-          <p>Supports financial tracking, quotations, invoicing, expense management and operational reporting.</p>
-          <ul class="capability-list"><li>Tracking</li><li>Quotations</li><li>Invoicing</li><li>Reporting</li></ul>
-        </article>
+    <section class="agent-roster" id="agent-roster" aria-labelledby="rosterHeading">
+      <div class="roster-shell">
+        <div class="roster-command">
+          <div class="roster-command__copy">
+            <p class="eyebrow">Agent roster</p>
+            <h2 id="rosterHeading">Roles inside the workforce.</h2>
+            <p>Interactive command view of every specialist agent—status, workload, capabilities and hierarchy in one place.</p>
+          </div>
+          <div class="roster-command__meta" aria-label="Roster system status">
+            <span class="roster-pill roster-pill--live"><span class="roster-pill__dot" aria-hidden="true"></span> Live roster</span>
+            <span class="roster-pill"><strong id="rosterOnlineCount">5</strong>&nbsp;online</span>
+            <span class="roster-pill">Latency&nbsp;<strong>42ms</strong></span>
+          </div>
+        </div>
+
+        <div class="roster-hierarchy" aria-label="Workforce hierarchy">
+          <p class="roster-hierarchy__label">Operating hierarchy</p>
+          <div class="roster-hierarchy__flow">
+            <span class="roster-node roster-node--human">Human Leadership</span>
+            <span class="roster-hierarchy__arrow" aria-hidden="true">→</span>
+            <span class="roster-node roster-node--ai">ATLAS</span>
+            <span class="roster-node roster-node--ai">NOVA</span>
+            <span class="roster-node roster-node--ai">FORGE</span>
+            <span class="roster-node roster-node--ai">VANTA</span>
+            <span class="roster-node roster-node--ai">FINN</span>
+            <span class="roster-hierarchy__arrow" aria-hidden="true">→</span>
+            <span class="roster-node">Delivery Outcomes</span>
+          </div>
+        </div>
+
+        <div class="roster-filters" role="tablist" aria-label="Filter agents by domain">
+          <button type="button" class="roster-filter is-active" data-roster-filter="all" role="tab" aria-selected="true">All agents</button>
+          <button type="button" class="roster-filter" data-roster-filter="delivery" role="tab" aria-selected="false">Delivery</button>
+          <button type="button" class="roster-filter" data-roster-filter="growth" role="tab" aria-selected="false">Growth</button>
+          <button type="button" class="roster-filter" data-roster-filter="ops" role="tab" aria-selected="false">Ops</button>
+        </div>
+
+        <div class="roster-layout">
+          <div class="roster-grid" id="rosterGrid">
+            <article class="roster-card" data-agent="atlas" data-portrait="./images/Atlast.png" data-domain="delivery" data-status="online" data-load="72" data-uptime="99.4" style="--p:72" tabindex="0" role="button" aria-pressed="false">
+              <div class="roster-card__top">
+                <div class="roster-card__identity">
+                  <div class="roster-avatar" aria-hidden="true">
+                    <img src="./images/Atlast.png" width="96" height="96" alt="Atlas" loading="lazy" decoding="async">
+                    <span class="roster-avatar__pulse"></span>
+                  </div>
+                  <div>
+                    <strong class="roster-card__name">Atlas</strong>
+                    <span class="roster-card__id">AGENT_01</span>
+                  </div>
+                </div>
+                <span class="roster-status">Online</span>
+              </div>
+              <div>
+                <p class="roster-card__role">AI Project Manager</p>
+                <p class="roster-card__domain">Project Intelligence</p>
+              </div>
+              <p class="roster-card__body">Plans projects, organizes tasks, tracks deadlines, coordinates workflows and keeps execution moving across the office.</p>
+              <div class="roster-metrics">
+                <div class="roster-load">
+                  <div class="roster-load__head"><span>Workload</span><strong>72%</strong></div>
+                  <div class="roster-load__bar"><div class="roster-load__fill" data-width="72"></div></div>
+                </div>
+                <div class="roster-ring" style="--p:72" aria-label="Workload 72 percent">72%</div>
+              </div>
+              <ul class="roster-tags capability-list">
+                <li>Planning</li><li>Coordination</li><li>Deadlines</li><li>Execution</li>
+              </ul>
+              <span class="roster-card__cta">Inspect agent →</span>
+            </article>
+
+            <article class="roster-card" data-agent="nova" data-portrait="./images/Nova.png" data-domain="delivery" data-status="busy" data-load="86" data-uptime="99.1" tabindex="0" role="button" aria-pressed="false">
+              <div class="roster-card__top">
+                <div class="roster-card__identity">
+                  <div class="roster-avatar" aria-hidden="true">
+                    <img src="./images/Nova.png" width="96" height="96" alt="Nova" loading="lazy" decoding="async">
+                    <span class="roster-avatar__pulse"></span>
+                  </div>
+                  <div>
+                    <strong class="roster-card__name">Nova</strong>
+                    <span class="roster-card__id">AGENT_02</span>
+                  </div>
+                </div>
+                <span class="roster-status">Busy</span>
+              </div>
+              <div>
+                <p class="roster-card__role">AI Systems Architect</p>
+                <p class="roster-card__domain">Systems Intelligence</p>
+              </div>
+              <p class="roster-card__body">Designs technical architecture, evaluates solutions, reviews structure and turns requirements into scalable systems.</p>
+              <div class="roster-metrics">
+                <div class="roster-load">
+                  <div class="roster-load__head"><span>Workload</span><strong>86%</strong></div>
+                  <div class="roster-load__bar"><div class="roster-load__fill" data-width="86"></div></div>
+                </div>
+                <div class="roster-ring" style="--p:86" aria-label="Workload 86 percent">86%</div>
+              </div>
+              <ul class="roster-tags capability-list">
+                <li>Architecture</li><li>Evaluation</li><li>Code Review</li><li>Scalability</li>
+              </ul>
+              <span class="roster-card__cta">Inspect agent →</span>
+            </article>
+
+            <article class="roster-card" data-agent="forge" data-portrait="./images/Forge.png" data-domain="delivery" data-status="online" data-load="91" data-uptime="98.8" tabindex="0" role="button" aria-pressed="false">
+              <div class="roster-card__top">
+                <div class="roster-card__identity">
+                  <div class="roster-avatar" aria-hidden="true">
+                    <img src="./images/Forge.png" width="96" height="96" alt="Forge" loading="lazy" decoding="async">
+                    <span class="roster-avatar__pulse"></span>
+                  </div>
+                  <div>
+                    <strong class="roster-card__name">Forge</strong>
+                    <span class="roster-card__id">AGENT_03</span>
+                  </div>
+                </div>
+                <span class="roster-status">Online</span>
+              </div>
+              <div>
+                <p class="roster-card__role">AI Software Engineer</p>
+                <p class="roster-card__domain">Product Engineering</p>
+              </div>
+              <p class="roster-card__body">Supports frontend, backend, integrations, testing and deployment across the development workflow.</p>
+              <div class="roster-metrics">
+                <div class="roster-load">
+                  <div class="roster-load__head"><span>Workload</span><strong>91%</strong></div>
+                  <div class="roster-load__bar"><div class="roster-load__fill" data-width="91"></div></div>
+                </div>
+                <div class="roster-ring" style="--p:91" aria-label="Workload 91 percent">91%</div>
+              </div>
+              <ul class="roster-tags capability-list">
+                <li>Frontend</li><li>Backend</li><li>Integrations</li><li>Deployment</li>
+              </ul>
+              <span class="roster-card__cta">Inspect agent →</span>
+            </article>
+
+            <article class="roster-card" data-agent="vanta" data-portrait="./images/Vin.png" data-domain="growth" data-status="online" data-load="64" data-uptime="99.6" tabindex="0" role="button" aria-pressed="false">
+              <div class="roster-card__top">
+                <div class="roster-card__identity">
+                  <div class="roster-avatar" aria-hidden="true">
+                    <img src="./images/Vin.png" width="96" height="96" alt="Vanta" loading="lazy" decoding="async">
+                    <span class="roster-avatar__pulse"></span>
+                  </div>
+                  <div>
+                    <strong class="roster-card__name">Vanta</strong>
+                    <span class="roster-card__id">AGENT_04</span>
+                  </div>
+                </div>
+                <span class="roster-status">Online</span>
+              </div>
+              <div>
+                <p class="roster-card__role">AI Sales &amp; Marketing</p>
+                <p class="roster-card__domain">Growth Intelligence</p>
+              </div>
+              <p class="roster-card__body">Researches markets, identifies opportunities, manages leads, supports proposals and drives growth signals.</p>
+              <div class="roster-metrics">
+                <div class="roster-load">
+                  <div class="roster-load__head"><span>Workload</span><strong>64%</strong></div>
+                  <div class="roster-load__bar"><div class="roster-load__fill" data-width="64"></div></div>
+                </div>
+                <div class="roster-ring" style="--p:64" aria-label="Workload 64 percent">64%</div>
+              </div>
+              <ul class="roster-tags capability-list">
+                <li>Markets</li><li>Leads</li><li>Proposals</li><li>Growth</li>
+              </ul>
+              <span class="roster-card__cta">Inspect agent →</span>
+            </article>
+
+            <article class="roster-card" data-agent="finn" data-portrait="./images/Fin.png" data-domain="ops" data-status="online" data-load="58" data-uptime="99.9" tabindex="0" role="button" aria-pressed="false">
+              <div class="roster-card__top">
+                <div class="roster-card__identity">
+                  <div class="roster-avatar" aria-hidden="true">
+                    <img src="./images/Fin.png" width="96" height="96" alt="Finn" loading="lazy" decoding="async">
+                    <span class="roster-avatar__pulse"></span>
+                  </div>
+                  <div>
+                    <strong class="roster-card__name">Finn</strong>
+                    <span class="roster-card__id">AGENT_05</span>
+                  </div>
+                </div>
+                <span class="roster-status">Online</span>
+              </div>
+              <div>
+                <p class="roster-card__role">AI Finance &amp; Operations</p>
+                <p class="roster-card__domain">Financial Intelligence</p>
+              </div>
+              <p class="roster-card__body">Supports financial tracking, quotations, invoicing, expense management and operational reporting.</p>
+              <div class="roster-metrics">
+                <div class="roster-load">
+                  <div class="roster-load__head"><span>Workload</span><strong>58%</strong></div>
+                  <div class="roster-load__bar"><div class="roster-load__fill" data-width="58"></div></div>
+                </div>
+                <div class="roster-ring" style="--p:58" aria-label="Workload 58 percent">58%</div>
+              </div>
+              <ul class="roster-tags capability-list">
+                <li>Tracking</li><li>Quotations</li><li>Invoicing</li><li>Reporting</li>
+              </ul>
+              <span class="roster-card__cta">Inspect agent →</span>
+            </article>
+          </div>
+
+          <aside class="roster-inspector" id="rosterInspector" aria-live="polite">
+            <p class="roster-inspector__kicker">Agent inspector</p>
+            <div id="rosterInspectorBody">
+              <p class="roster-inspector__empty">Select an agent card to inspect status, workload and capabilities in real time.</p>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
 

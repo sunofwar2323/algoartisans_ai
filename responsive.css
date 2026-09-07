@@ -261,9 +261,17 @@ img {
     font-size: clamp(1.4rem, 6vw, 1.9rem);
   }
 
-  /* Agent roster cards */
-  .agent-detail-grid {
-    grid-template-columns: 1fr !important;
+  /* Agent roster */
+  .roster-command {
+    padding: 1.1rem;
+  }
+
+  .roster-inspector__stats {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .roster-card {
+    padding: 1rem;
   }
 
   /* Founders */

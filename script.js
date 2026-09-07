@@ -1253,8 +1253,193 @@
   };
 
   /* =========================================================
-     AI Workforce HQ — workforce.html only
+     Agent Roster — interactive dashboard (workforce.html)
      ========================================================= */
+  const initAgentRoster = () => {
+    const section = document.getElementById("agent-roster");
+    if (!section) return;
+
+    const cards = [...section.querySelectorAll(".roster-card")];
+    const filters = [...section.querySelectorAll("[data-roster-filter]")];
+    const inspector = document.getElementById("rosterInspector");
+    const inspectorBody = document.getElementById("rosterInspectorBody");
+    const onlineCount = document.getElementById("rosterOnlineCount");
+    let activeFilter = "all";
+    let selected = null;
+
+    const animateLoads = () => {
+      cards.forEach((card) => {
+        const fill = card.querySelector(".roster-load__fill");
+        const ring = card.querySelector(".roster-ring");
+        const w = Number(card.dataset.load || fill?.dataset.width || 0);
+        if (fill) {
+          requestAnimationFrame(() => {
+            fill.style.width = `${w}%`;
+          });
+        }
+        if (ring) ring.style.setProperty("--p", String(w));
+      });
+    };
+
+    const updateOnline = () => {
+      if (!onlineCount) return;
+      const n = cards.filter((c) => c.dataset.status === "online" && !c.classList.contains("is-dimmed")).length;
+      onlineCount.textContent = String(n || cards.filter((c) => !c.classList.contains("is-dimmed")).length);
+    };
+
+    const renderInspector = (card) => {
+      if (!inspector || !inspectorBody || !card) return;
+      const name = card.querySelector(".roster-card__name")?.textContent || "";
+      const role = card.querySelector(".roster-card__role")?.textContent || "";
+      const body = card.querySelector(".roster-card__body")?.textContent || "";
+      const id = card.querySelector(".roster-card__id")?.textContent || "";
+      const domain = card.querySelector(".roster-card__domain")?.textContent || "";
+      const status = card.dataset.status || "online";
+      const load = card.dataset.load || "0";
+      const uptime = card.dataset.uptime || "99.0";
+      const portrait = card.dataset.portrait || "";
+      const caps = [...card.querySelectorAll(".roster-tags li")].map((li) => li.textContent);
+
+      inspector.classList.remove("is-active");
+      void inspector.offsetWidth;
+      inspector.classList.add("is-active");
+      inspector.style.setProperty("--accent-local", getComputedStyle(card).getPropertyValue("--accent-local") || "#22d3ee");
+
+      const portraitHtml = portrait
+        ? `<div class="roster-inspector__portrait"><img src="${portrait}" width="360" height="300" alt="${name}, ${role}" loading="lazy" decoding="async"></div>`
+        : "";
+
+      inspectorBody.innerHTML = `
+        ${portraitHtml}
+        <div class="roster-inspector__head">
+          <div>
+            <h3>${name}</h3>
+            <p>${role}</p>
+          </div>
+        </div>
+        <div class="roster-inspector__stats">
+          <div class="roster-stat"><span>Status</span><strong>${status}</strong></div>
+          <div class="roster-stat"><span>Load</span><strong>${load}%</strong></div>
+          <div class="roster-stat"><span>Uptime</span><strong>${uptime}%</strong></div>
+        </div>
+        <p class="roster-card__domain" style="margin:0">${domain} · ${id}</p>
+        <p class="roster-inspector__body">${body}</p>
+        <div class="roster-inspector__caps">${caps.map((c) => `<span>${c}</span>`).join("")}</div>
+        <div class="roster-inspector__actions">
+          <a class="btn btn-primary" href="./start-project.html">Deploy this role →</a>
+          <button type="button" class="btn btn-ghost" data-roster-clear>Clear</button>
+        </div>
+      `;
+    };
+
+    const selectCard = (card) => {
+      selected = card;
+      cards.forEach((c) => {
+        const on = c === card;
+        c.classList.toggle("is-selected", on);
+        c.setAttribute("aria-pressed", String(on));
+      });
+      renderInspector(card);
+
+      // Soft-link to HQ zones if present
+      const key = card.dataset.agent;
+      const zone = document.querySelector(`.whq-zone[data-agent="${key}"]`);
+      if (zone && mqDesktop.matches) {
+        zone.classList.add("is-focused");
+        setTimeout(() => zone.classList.remove("is-focused"), 1200);
+      }
+    };
+
+    const applyFilter = (filter) => {
+      activeFilter = filter;
+      filters.forEach((btn) => {
+        const on = btn.dataset.rosterFilter === filter;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-selected", String(on));
+      });
+      cards.forEach((card) => {
+        const match = filter === "all" || card.dataset.domain === filter;
+        card.classList.toggle("is-dimmed", !match);
+        card.hidden = false;
+      });
+      updateOnline();
+    };
+
+    section.addEventListener("click", (e) => {
+      const filterBtn = e.target.closest("[data-roster-filter]");
+      if (filterBtn) {
+        applyFilter(filterBtn.dataset.rosterFilter);
+        return;
+      }
+      if (e.target.closest("[data-roster-clear]")) {
+        selected = null;
+        cards.forEach((c) => {
+          c.classList.remove("is-selected");
+          c.setAttribute("aria-pressed", "false");
+        });
+        inspector?.classList.remove("is-active");
+        if (inspectorBody) {
+          inspectorBody.innerHTML =
+            '<p class="roster-inspector__empty">Select an agent card to inspect status, workload and capabilities in real time.</p>';
+        }
+        return;
+      }
+      const card = e.target.closest(".roster-card");
+      if (card && !card.classList.contains("is-dimmed")) selectCard(card);
+    });
+
+    section.addEventListener("keydown", (e) => {
+      const card = e.target.closest(".roster-card");
+      if (!card) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (!card.classList.contains("is-dimmed")) selectCard(card);
+      }
+    });
+
+    // Animate bars when roster enters viewport
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateLoads();
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(section);
+    onCleanup(() => io.disconnect());
+
+    // Subtle live load jitter
+    if (!reduceMotion) {
+      const tick = setInterval(() => {
+        if (document.visibilityState !== "visible") return;
+        cards.forEach((card) => {
+          const base = Number(card.dataset.load || 60);
+          const next = Math.max(42, Math.min(96, base + Math.round((Math.random() - 0.5) * 4)));
+          card.dataset.load = String(next);
+          const fill = card.querySelector(".roster-load__fill");
+          const label = card.querySelector(".roster-load__head strong");
+          const ring = card.querySelector(".roster-ring");
+          if (fill) fill.style.width = `${next}%`;
+          if (label) label.textContent = `${next}%`;
+          if (ring) {
+            ring.style.setProperty("--p", String(next));
+            ring.textContent = `${next}%`;
+          }
+          if (selected === card) {
+            const loadStat = inspectorBody?.querySelector(".roster-stat:nth-child(2) strong");
+            if (loadStat) loadStat.textContent = `${next}%`;
+          }
+        });
+      }, 4200);
+      onCleanup(() => clearInterval(tick));
+    }
+
+    updateOnline();
+  };
   const whqAgents = {
     atlas: {
       id: "AGENT_01",
@@ -1264,6 +1449,7 @@
       role: "AI Project Manager",
       body: "I coordinate projects, manage workflows and keep the team moving.",
       caps: ["PLANNING", "COORDINATION", "TASK MANAGEMENT", "EXECUTION"],
+      portrait: "./images/Atlast.png",
     },
     nova: {
       id: "AGENT_02",
@@ -1273,6 +1459,7 @@
       role: "AI Systems Architect",
       body: "I work on architecture, technical planning, system design and scalable engineering solutions.",
       caps: ["ARCHITECTURE", "SYSTEM DESIGN", "APIS", "SCALABILITY"],
+      portrait: "./images/Nova.png",
     },
     forge: {
       id: "AGENT_03",
@@ -1282,6 +1469,7 @@
       role: "AI Software Engineer",
       body: "I work across development, testing, integrations and deployment.",
       caps: ["CODE", "BUILD", "TEST", "DEPLOY"],
+      portrait: "./images/Forge.png",
     },
     vanta: {
       id: "AGENT_04",
@@ -1291,6 +1479,7 @@
       role: "AI Sales & Marketing",
       body: "I work across market research, leads, proposals, sales intelligence and growth.",
       caps: ["MARKETS", "LEADS", "ANALYTICS", "GROWTH"],
+      portrait: "./images/Vin.png",
     },
     finn: {
       id: "AGENT_05",
@@ -1300,6 +1489,7 @@
       role: "AI Finance & Operations",
       body: "I support finance, invoices, expenses, reporting and operational workflows.",
       caps: ["FINANCE", "INVOICES", "REPORTS", "OPERATIONS"],
+      portrait: "./images/Fin.png",
     },
   };
 
@@ -1553,11 +1743,24 @@
       const roleEl = document.getElementById("whqPanelRole");
       const bodyEl = document.getElementById("whqPanelBody");
       const capsEl = document.getElementById("whqPanelCaps");
+      const portraitWrap = document.getElementById("whqPanelPortrait");
+      const portraitImg = document.getElementById("whqPanelPortraitImg");
       if (idEl) idEl.textContent = data.id;
       if (nameEl) nameEl.textContent = data.name;
       if (roleEl) roleEl.textContent = data.role;
       if (bodyEl) bodyEl.textContent = data.body;
       if (capsEl) capsEl.innerHTML = data.caps.map((c) => `<span>${c}</span>`).join("");
+      if (portraitWrap && portraitImg) {
+        if (data.portrait) {
+          portraitImg.src = data.portrait;
+          portraitImg.alt = `${data.name}, ${data.role}`;
+          portraitWrap.hidden = false;
+          panel.classList.add("has-portrait");
+        } else {
+          portraitWrap.hidden = true;
+          panel.classList.remove("has-portrait");
+        }
+      }
       typeLine(helloEl, data.hello, () => {
         setTimeout(() => {
           if (helloEl && selected === key) helloEl.textContent = `${data.hello} ${data.line}`;
@@ -1867,6 +2070,8 @@
       scrollTriggers,
       quality,
     });
+
+    initAgentRoster();
 
     const collabSt = ScrollTrigger.create({
       trigger: "#human-ai",
