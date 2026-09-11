@@ -107,6 +107,12 @@
   transform: var(--meet-cam, translate3d(-4%, 2%, 70px) scale(1.45));
 }
 
+.meet-office[data-cam="ledger"] .meet-camera {
+  transform: translate3d(-28%, 8%, 0) scale(1.34);
+}
+.meet-office[data-cam="david"] .meet-camera {
+  transform: translate3d(-8%, 6%, 0) scale(1.38);
+}
 .meet-office[data-cam="vanta"] .meet-camera {
   transform: var(--meet-cam, translate3d(-18%, 4%, 60px) scale(1.42));
 }
@@ -441,6 +447,10 @@
 .meet-desk[data-agent="nova"] .meet-agent__head { background: linear-gradient(160deg, #c4b5fd, #6366f1); }
 .meet-desk[data-agent="nova"] .meet-agent__head i { background: #a5b4fc; }
 .meet-desk[data-agent="forge"] .meet-agent__head { background: linear-gradient(160deg, #67e8f9, #0ea5e9); }
+.meet-desk[data-agent="ledger"] .meet-agent__head { background: linear-gradient(160deg, #cbd5e1, #64748b); }
+.meet-desk[data-agent="ledger"] .meet-agent__head i { background: #94a3b8; }
+.meet-desk[data-agent="david"] .meet-agent__head { background: linear-gradient(160deg, #93c5fd, #2563eb); }
+.meet-desk[data-agent="david"] .meet-agent__head i { background: #60a5fa; }
 .meet-desk[data-agent="vanta"] .meet-agent__head { background: linear-gradient(160deg, #86efac, #16a34a); }
 .meet-desk[data-agent="vanta"] .meet-agent__head i { background: #4ade80; }
 .meet-desk[data-agent="finn"] .meet-agent__head { background: linear-gradient(160deg, #fcd34d, #d97706); }
@@ -472,12 +482,14 @@
   50% { transform: rotate(6deg); }
 }
 
-/* Natural desk placement */
-.meet-desk--atlas { left: 7%; top: 46%; }
-.meet-desk--nova { left: 26%; top: 54%; }
-.meet-desk--forge { left: 46%; top: 57%; }
-.meet-desk--vanta { left: 64%; top: 52%; }
-.meet-desk--finn { left: 80%; top: 45%; }
+/* Natural desk placement — seven specialists */
+.meet-desk--atlas { left: 2%; top: 44%; }
+.meet-desk--nova { left: 16%; top: 52%; }
+.meet-desk--david { left: 30%; top: 56%; }
+.meet-desk--forge { left: 44%; top: 57%; }
+.meet-desk--vanta { left: 58%; top: 53%; }
+.meet-desk--finn { left: 72%; top: 47%; }
+.meet-desk--ledger { left: 86%; top: 42%; }
 
 .meet-lamp {
   position: absolute;
@@ -735,7 +747,7 @@
 
   .meet-mobile-nav {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.35rem;
     margin-top: 0.85rem;
   }

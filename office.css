@@ -491,6 +491,29 @@
 .desk.is-working .fin-bars i:nth-child(2) { height: 75%; background: rgba(34, 211, 238, 0.55); }
 .desk.is-working .fin-bars i:nth-child(3) { height: 40%; }
 
+.screen--david,
+.screen--ledger,
+.screen--forge {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  font-size: 0.38rem;
+  letter-spacing: 0.08em;
+  color: rgba(148, 163, 184, 0.75);
+}
+
+.screen--david span:first-child,
+.screen--ledger span:first-child,
+.screen--forge span:first-child {
+  color: var(--accent);
+}
+
+.desk.is-working .screen--david span:nth-child(2),
+.desk.is-working .screen--ledger span:nth-child(2),
+.desk.is-working .screen--forge span:nth-child(2) {
+  color: rgba(226, 232, 240, 0.9);
+}
+
 .keyboard {
   position: absolute;
   left: 50%;
@@ -563,6 +586,10 @@
 .agent--nova .agent-head { background: linear-gradient(160deg, #c4b5fd, #6366f1); }
 .agent--nova .agent-head i { background: #a5b4fc; }
 .agent--forge .agent-head { background: linear-gradient(160deg, #67e8f9, #0ea5e9); }
+.agent--ledger .agent-head { background: linear-gradient(160deg, #cbd5e1, #64748b); }
+.agent--ledger .agent-head i { background: #94a3b8; }
+.agent--david .agent-head { background: linear-gradient(160deg, #93c5fd, #2563eb); }
+.agent--david .agent-head i { background: #60a5fa; }
 .agent--vanta .agent-head { background: linear-gradient(160deg, #86efac, #22c55e); }
 .agent--vanta .agent-head i { background: #4ade80; }
 .agent--finn .agent-head { background: linear-gradient(160deg, #fcd34d, #f59e0b); }
@@ -599,12 +626,14 @@
   color: var(--muted-strong);
 }
 
-/* Positions */
-.desk--atlas { left: 8%; top: 48%; }
-.desk--nova { left: 28%; top: 56%; }
-.desk--forge { left: 48%; top: 58%; }
-.desk--vanta { left: 66%; top: 54%; }
-.desk--finn { left: 82%; top: 48%; }
+/* Positions — seven desks, evenly spaced */
+.desk--atlas { left: 4%; top: 46%; }
+.desk--nova { left: 18%; top: 54%; }
+.desk--david { left: 32%; top: 56%; }
+.desk--forge { left: 46%; top: 58%; }
+.desk--vanta { left: 60%; top: 52%; }
+.desk--finn { left: 74%; top: 48%; }
+.desk--ledger { left: 88%; top: 44%; }
 
 .office-server {
   position: absolute;
@@ -642,11 +671,13 @@
 }
 
 /* Camera focus states via section phase */
-.office-section[data-cam="atlas"] .office-camera { transform: translate3d(8%, 4%, 0) scale(1.28); }
-.office-section[data-cam="nova"] .office-camera { transform: translate3d(-2%, 2%, 0) scale(1.28); }
+.office-section[data-cam="atlas"] .office-camera { transform: translate3d(10%, 4%, 0) scale(1.28); }
+.office-section[data-cam="nova"] .office-camera { transform: translate3d(4%, 2%, 0) scale(1.28); }
+.office-section[data-cam="david"] .office-camera { transform: translate3d(-2%, 2%, 0) scale(1.28); }
 .office-section[data-cam="forge"] .office-camera { transform: translate3d(-10%, 0%, 0) scale(1.28); }
-.office-section[data-cam="vanta"] .office-camera { transform: translate3d(-18%, 2%, 0) scale(1.28); }
-.office-section[data-cam="finn"] .office-camera { transform: translate3d(-24%, 4%, 0) scale(1.28); }
+.office-section[data-cam="vanta"] .office-camera { transform: translate3d(-16%, 2%, 0) scale(1.28); }
+.office-section[data-cam="finn"] .office-camera { transform: translate3d(-22%, 4%, 0) scale(1.28); }
+.office-section[data-cam="ledger"] .office-camera { transform: translate3d(-28%, 4%, 0) scale(1.28); }
 .office-section[data-cam="wide"] .office-camera { transform: translate3d(0, 0, 0) scale(1); }
 
 .office-agent-panel {

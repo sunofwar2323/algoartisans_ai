@@ -274,7 +274,7 @@
     },
   ];
 
-  const agents = {
+      const agents = {
     atlas: {
       domain: "Project Intelligence",
       name: "Atlas",
@@ -283,32 +283,46 @@
       caps: ["Planning", "Coordination", "Deadlines", "Execution"],
     },
     nova: {
-      domain: "Systems Intelligence",
+      domain: "Product Engineering",
       name: "Nova",
-      role: "AI Systems Architect",
-      desc: "Designs technical architecture, evaluates solutions, reviews code and helps transform requirements into scalable systems.",
-      caps: ["Architecture", "Evaluation", "Code Review", "Scalability"],
+      role: "AI Software Engineer",
+      desc: "Builds and ships code across frontend, backend, integrations and deployment for AlgoArtisans products.",
+      caps: ["Frontend", "Backend", "Integrations", "Deployment"],
+    },
+    david: {
+      domain: "Research Intelligence",
+      name: "David",
+      role: "AI Researcher",
+      desc: "Digs up competitors, approaches, docs and tradeoffs—structured findings with sources for better decisions.",
+      caps: ["Research", "Competitors", "Tradeoffs", "Sources"],
     },
     forge: {
-      domain: "Product Engineering",
+      domain: "Quality Assurance",
       name: "Forge",
-      role: "AI Software Engineer",
-      desc: "Supports frontend, backend, integrations, testing and deployment across our development workflow.",
-      caps: ["Frontend", "Backend", "Integrations", "Deployment"],
+      role: "AI QA / Tester",
+      desc: "Verifies builds, catches regressions, runs test plans and files clear bug reports with repro steps.",
+      caps: ["Testing", "Verification", "Regressions", "Reports"],
     },
     vanta: {
       domain: "Growth Intelligence",
-      name: "Vanta",
-      role: "AI Sales & Marketing",
-      desc: "Researches markets, identifies opportunities, manages leads, supports proposals and drives growth.",
-      caps: ["Markets", "Leads", "Proposals", "Growth"],
+      name: "Vinta",
+      role: "AI Marketing Officer",
+      desc: "Owns positioning, campaigns, messaging and go-to-market so AlgoArtisans reaches the right audience.",
+      caps: ["Positioning", "Campaigns", "Messaging", "GTM"],
     },
     finn: {
       domain: "Financial Intelligence",
       name: "Finn",
-      role: "AI Finance & Operations",
-      desc: "Supports financial tracking, quotations, invoicing, expense management and operational reporting.",
-      caps: ["Tracking", "Quotations", "Invoicing", "Reporting"],
+      role: "AI Finance Officer",
+      desc: "Supports budgets, forecasts, pricing, costs and financial tradeoffs with clear numbers and assumptions.",
+      caps: ["Budgets", "Forecasts", "Pricing", "Costs"],
+    },
+    ledger: {
+      domain: "Change Intelligence",
+      name: "Ledger",
+      role: "AI Auditor",
+      desc: "Notes every project change, decision and team update—keeps a clear chronological change log for the crew.",
+      caps: ["Change Log", "Decisions", "Assignments", "Audit Trail"],
     },
   };
 
@@ -549,8 +563,8 @@
     const metaProject = document.getElementById("officeProjectMeta");
     const metaSystem = document.getElementById("officeSystemMeta");
     const moment = document.getElementById("workforceMoment");
-    const order = ["atlas", "nova", "forge", "vanta", "finn"];
-    const cams = ["atlas", "nova", "forge", "vanta", "finn", "wide"];
+    const order = ["atlas", "nova", "david", "forge", "vanta", "finn", "ledger"];
+    const cams = ["atlas", "nova", "david", "forge", "vanta", "finn", "ledger", "wide"];
 
     let activeCount = 0;
     let alive = false;
@@ -559,10 +573,12 @@
 
     const packets = [
       { from: "atlas", to: "nova", msg: "TASK_ASSIGNED" },
-      { from: "nova", to: "forge", msg: "ARCHITECTURE_READY" },
-      { from: "forge", to: "atlas", msg: "BUILD_COMPLETE" },
-      { from: "vanta", to: "atlas", msg: "MARKET_RESEARCH_READY" },
-      { from: "finn", to: "atlas", msg: "OPERATIONS_UPDATED" },
+      { from: "nova", to: "forge", msg: "BUILD_READY" },
+      { from: "forge", to: "atlas", msg: "QA_PASSED" },
+      { from: "david", to: "atlas", msg: "RESEARCH_READY" },
+      { from: "vanta", to: "atlas", msg: "CAMPAIGN_READY" },
+      { from: "finn", to: "atlas", msg: "BUDGET_UPDATED" },
+      { from: "ledger", to: "atlas", msg: "CHANGELOG_UPDATED" },
     ];
 
     const setMeta = () => {
@@ -571,7 +587,7 @@
         metaProject.textContent =
           activeCount >= 3 ? "PROJECT STATUS: BUILDING" : activeCount > 0 ? "PROJECT STATUS: INITIALIZING" : "PROJECT STATUS: IDLE";
       }
-      if (metaSystem) metaSystem.textContent = activeCount >= 5 ? "OPERATIONAL" : activeCount > 0 ? "BOOTING" : "STANDBY";
+      if (metaSystem) metaSystem.textContent = activeCount >= 7 ? "OPERATIONAL" : activeCount > 0 ? "BOOTING" : "STANDBY";
     };
 
     const wakeAgent = (key) => {
@@ -579,7 +595,7 @@
       const mobile = section.querySelector(`.office-mobile__desk[data-agent="${key}"]`);
       if (desk && !desk.classList.contains("is-awake")) {
         desk.classList.add("is-awake");
-        activeCount = Math.min(5, activeCount + 1);
+        activeCount = Math.min(7, activeCount + 1);
         setMeta();
       }
       mobile?.classList.add("is-awake");
@@ -628,8 +644,8 @@
           requestAnimationFrame(step);
         }
       }
-      if (p.msg.includes("BUILD") && forgeBadge) {
-        forgeBadge.textContent = Math.random() > 0.5 ? "BUILD SUCCESS" : "TEST PASSED";
+      if ((p.msg.includes("QA") || p.msg.includes("BUILD") || p.msg.includes("TEST")) && forgeBadge) {
+        forgeBadge.textContent = Math.random() > 0.5 ? "QA PASSED" : "TESTS OK";
         forgeBadge.classList.add("is-on");
         setTimeout(() => forgeBadge.classList.remove("is-on"), 1600);
       }
@@ -686,25 +702,33 @@
         section.dataset.cam = "nova";
       }
       if (phase >= 3) {
+        wakeAgent("david");
+        section.dataset.cam = "david";
+      }
+      if (phase >= 4) {
         wakeAgent("forge");
         section.dataset.cam = "forge";
         setWorking("forge", true);
       }
-      if (phase >= 4) {
+      if (phase >= 5) {
         wakeAgent("vanta");
         section.dataset.cam = "vanta";
       }
-      if (phase >= 5) {
+      if (phase >= 6) {
         wakeAgent("finn");
         section.dataset.cam = "finn";
       }
-      if (phase >= 6) {
+      if (phase >= 7) {
+        wakeAgent("ledger");
+        section.dataset.cam = "ledger";
+      }
+      if (phase >= 8) {
         section.classList.add("is-networked");
         section.dataset.cam = "wide";
         alive = true;
         scheduleActivity();
       }
-      if (phase >= 7) {
+      if (phase >= 9) {
         playMoment();
       }
     };
@@ -776,7 +800,7 @@
       const netSt = ST.create({
         trigger: section,
         start: "center 55%",
-        onEnter: () => setPhase(6),
+        onEnter: () => setPhase(8),
       });
       sts.push(netSt);
 
@@ -784,7 +808,7 @@
         trigger: section,
         start: "center 40%",
         once: true,
-        onEnter: () => setPhase(7),
+        onEnter: () => setPhase(9),
       });
       sts.push(climax);
 
@@ -849,7 +873,7 @@
   /* =========================================================
      Meet Office — homepage interactive discovery
      ========================================================= */
-  const meetAgents = {
+      const meetAgents = {
     atlas: {
       name: "ATLAS",
       hello: "Hi, I'm ATLAS.",
@@ -861,34 +885,50 @@
     nova: {
       name: "NOVA",
       hello: "Hi, I'm NOVA.",
-      line: "I design the systems behind the ideas.",
-      role: "AI Systems Architect",
-      body: "I work on architecture, technical planning, system design and scalable engineering solutions.",
-      caps: ["ARCHITECTURE", "SYSTEM DESIGN", "TECHNICAL PLANNING", "SCALABILITY"],
+      line: "I build and ship the product.",
+      role: "AI Software Engineer",
+      body: "I turn requirements into working software—frontend, backend, integrations and deployment.",
+      caps: ["FRONTEND", "BACKEND", "INTEGRATIONS", "DEPLOYMENT"],
+    },
+    david: {
+      name: "DAVID",
+      hello: "Hi, I'm DAVID.",
+      line: "I dig up the options that matter.",
+      role: "AI Researcher",
+      body: "I research competitors, approaches, docs and tradeoffs—and return structured findings with sources.",
+      caps: ["RESEARCH", "COMPETITORS", "TRADEOFFS", "SOURCES"],
     },
     forge: {
       name: "FORGE",
       hello: "Hi, I'm FORGE.",
-      line: "I turn architecture into working software.",
-      role: "AI Software Engineer",
-      body: "I work across development, testing, integrations and deployment.",
-      caps: ["DEVELOPMENT", "TESTING", "INTEGRATIONS", "DEPLOYMENT"],
+      line: "I break it before users do.",
+      role: "AI QA / Tester",
+      body: "I verify builds, catch regressions and report issues with clear repro steps.",
+      caps: ["TESTING", "VERIFICATION", "REGRESSIONS", "REPORTS"],
     },
     vanta: {
-      name: "VANTA",
-      hello: "Hi, I'm VANTA.",
-      line: "I find opportunities and turn information into growth.",
-      role: "AI Sales & Marketing",
-      body: "I work across market research, leads, proposals, sales intelligence and marketing.",
-      caps: ["MARKET RESEARCH", "LEADS", "PROPOSALS", "GROWTH"],
+      name: "VINTA",
+      hello: "Hi, I'm VINTA.",
+      line: "I turn the product into a story people want.",
+      role: "AI Marketing Officer",
+      body: "I work across positioning, campaigns, messaging and go-to-market.",
+      caps: ["POSITIONING", "CAMPAIGNS", "MESSAGING", "GTM"],
     },
     finn: {
       name: "FINN",
       hello: "Hi, I'm FINN.",
-      line: "I keep the numbers and operations under control.",
-      role: "AI Finance & Operations",
-      body: "I support finance, invoices, expenses, reporting and operational workflows.",
-      caps: ["FINANCE", "INVOICES", "EXPENSES", "OPERATIONS"],
+      line: "I keep the numbers clear and honest.",
+      role: "AI Finance Officer",
+      body: "I support budgets, forecasts, pricing, costs and financial tradeoffs.",
+      caps: ["BUDGETS", "FORECASTS", "PRICING", "COSTS"],
+    },
+    ledger: {
+      name: "LEDGER",
+      hello: "Hi, I'm LEDGER.",
+      line: "I note every change so nothing gets lost.",
+      role: "AI Auditor",
+      body: "I keep a chronological log of project changes, decisions, assignments and team updates.",
+      caps: ["CHANGE LOG", "DECISIONS", "ASSIGNMENTS", "AUDIT TRAIL"],
     },
   };
 
@@ -914,7 +954,7 @@
     const packet = document.getElementById("meetPacket");
     const mobileNav = document.getElementById("meetMobileNav");
     const desks = [...section.querySelectorAll(".meet-desk")];
-    const order = ["atlas", "nova", "forge", "vanta", "finn"];
+    const order = ["atlas", "nova", "david", "forge", "vanta", "finn", "ledger"];
 
     let inside = false;
     let alive = false;
@@ -929,11 +969,13 @@
     let ty = 0;
 
     const packets = [
-      { from: "atlas", to: "forge", label: "TASK → FORGE" },
-      { from: "forge", to: "atlas", label: "BUILD COMPLETE" },
       { from: "atlas", to: "nova", label: "TASK → NOVA" },
-      { from: "vanta", to: "atlas", label: "LEADS READY" },
-      { from: "finn", to: "atlas", label: "OPS UPDATED" },
+      { from: "nova", to: "forge", label: "BUILD READY" },
+      { from: "forge", to: "atlas", label: "QA PASSED" },
+      { from: "david", to: "atlas", label: "RESEARCH READY" },
+      { from: "vanta", to: "atlas", label: "CAMPAIGN READY" },
+      { from: "finn", to: "atlas", label: "BUDGET UPDATED" },
+      { from: "ledger", to: "atlas", label: "CHANGELOG UPDATED" },
     ];
 
     const clearActivity = () => {
@@ -1015,6 +1057,8 @@
         atlas: { x: 22, y: 6, s: 1.42 },
         nova: { x: 8, y: 4, s: 1.42 },
         forge: { x: -4, y: 2, s: 1.45 },
+        david: { x: -8, y: 6, s: 1.38 },
+        ledger: { x: -28, y: 8, s: 1.34 },
         vanta: { x: -18, y: 4, s: 1.42 },
         finn: { x: -30, y: 6, s: 1.42 },
       };
@@ -1130,6 +1174,8 @@
       section.classList.add("is-inside");
       section.dataset.meet = "inside";
       section.dataset.cam = "wide";
+      const online = document.getElementById("meetOnline");
+      if (online) online.textContent = "7 AGENTS ONLINE";
       if (stage) stage.setAttribute("aria-hidden", "false");
       applyCam();
       // lazy “boot” activity once inside + visible
@@ -1440,7 +1486,7 @@
 
     updateOnline();
   };
-  const whqAgents = {
+      const whqAgents = {
     atlas: {
       id: "AGENT_01",
       name: "ATLAS",
@@ -1455,41 +1501,61 @@
       id: "AGENT_02",
       name: "NOVA",
       hello: "Hi, I'm NOVA.",
-      line: "I design the systems behind the ideas.",
-      role: "AI Systems Architect",
-      body: "I work on architecture, technical planning, system design and scalable engineering solutions.",
-      caps: ["ARCHITECTURE", "SYSTEM DESIGN", "APIS", "SCALABILITY"],
+      line: "I build and ship the product.",
+      role: "AI Software Engineer",
+      body: "I turn requirements into working software—frontend, backend, integrations and deployment.",
+      caps: ["FRONTEND", "BACKEND", "INTEGRATIONS", "DEPLOY"],
       portrait: "./images/Nova.png",
     },
-    forge: {
+    david: {
       id: "AGENT_03",
+      name: "DAVID",
+      hello: "Hi, I'm DAVID.",
+      line: "I dig up the options that matter.",
+      role: "AI Researcher",
+      body: "I research competitors, approaches, docs and tradeoffs—and return structured findings with sources.",
+      caps: ["RESEARCH", "COMPETITORS", "TRADEOFFS", "SOURCES"],
+      portrait: "./images/David.png",
+    },
+    forge: {
+      id: "AGENT_04",
       name: "FORGE",
       hello: "Hi, I'm FORGE.",
-      line: "I turn architecture into working software.",
-      role: "AI Software Engineer",
-      body: "I work across development, testing, integrations and deployment.",
-      caps: ["CODE", "BUILD", "TEST", "DEPLOY"],
+      line: "I break it before users do.",
+      role: "AI QA / Tester",
+      body: "I verify builds, catch regressions and report issues with clear repro steps.",
+      caps: ["TEST", "VERIFY", "REGRESSIONS", "REPORTS"],
       portrait: "./images/Forge.png",
     },
     vanta: {
-      id: "AGENT_04",
-      name: "VANTA",
-      hello: "Hi, I'm VANTA.",
-      line: "I turn information into opportunities.",
-      role: "AI Sales & Marketing",
-      body: "I work across market research, leads, proposals, sales intelligence and growth.",
-      caps: ["MARKETS", "LEADS", "ANALYTICS", "GROWTH"],
+      id: "AGENT_05",
+      name: "VINTA",
+      hello: "Hi, I'm VINTA.",
+      line: "I turn the product into a story people want.",
+      role: "AI Marketing Officer",
+      body: "I work across positioning, campaigns, messaging and go-to-market.",
+      caps: ["POSITIONING", "CAMPAIGNS", "MESSAGING", "GTM"],
       portrait: "./images/Vin.png",
     },
     finn: {
-      id: "AGENT_05",
+      id: "AGENT_06",
       name: "FINN",
       hello: "Hi, I'm FINN.",
-      line: "I keep operations running smoothly.",
-      role: "AI Finance & Operations",
-      body: "I support finance, invoices, expenses, reporting and operational workflows.",
-      caps: ["FINANCE", "INVOICES", "REPORTS", "OPERATIONS"],
+      line: "I keep the numbers clear and honest.",
+      role: "AI Finance Officer",
+      body: "I support budgets, forecasts, pricing, costs and financial tradeoffs.",
+      caps: ["BUDGETS", "FORECASTS", "PRICING", "COSTS"],
       portrait: "./images/Fin.png",
+    },
+    ledger: {
+      id: "AGENT_07",
+      name: "LEDGER",
+      hello: "Hi, I'm LEDGER.",
+      line: "I note every change so nothing gets lost.",
+      role: "AI Auditor",
+      body: "I keep a chronological log of project changes, decisions, assignments and team updates.",
+      caps: ["CHANGE LOG", "DECISIONS", "ASSIGNMENTS", "AUDIT TRAIL"],
+      portrait: "./images/Ledger.png",
     },
   };
 
@@ -1514,7 +1580,7 @@
     const forgeBadge = document.getElementById("whqForgeBadge");
     const mobileNav = document.getElementById("whqMobileNav");
     const zones = [...section.querySelectorAll(".whq-zone")];
-    const order = ["atlas", "nova", "forge", "vanta", "finn"];
+    const order = ["atlas", "nova", "david", "forge", "vanta", "finn", "ledger"];
 
     let alive = false;
     let selected = null;
@@ -1529,10 +1595,12 @@
 
     const packets = [
       { from: "atlas", to: "nova", label: "TASK ASSIGNED" },
-      { from: "nova", to: "forge", label: "ARCHITECTURE READY" },
-      { from: "forge", to: "atlas", label: "BUILD COMPLETE" },
-      { from: "vanta", to: "core", label: "MARKET INSIGHT" },
-      { from: "finn", to: "core", label: "OPERATIONS UPDATED" },
+      { from: "nova", to: "forge", label: "BUILD READY" },
+      { from: "forge", to: "atlas", label: "QA PASSED" },
+      { from: "david", to: "core", label: "RESEARCH READY" },
+      { from: "vanta", to: "core", label: "CAMPAIGN READY" },
+      { from: "finn", to: "core", label: "BUDGET UPDATED" },
+      { from: "ledger", to: "core", label: "CHANGELOG UPDATED" },
       { from: "atlas", to: "forge", label: "TASK → FORGE" },
     ];
 
@@ -1566,6 +1634,11 @@
 
     const wake = (key) => {
       section.querySelector(`.whq-zone[data-agent="${key}"]`)?.classList.add("is-awake");
+      const meta = document.getElementById("whqAgentsMeta");
+      if (meta) {
+        const n = section.querySelectorAll(".whq-zone.is-awake").length;
+        meta.textContent = `${n} AGENTS ONLINE`;
+      }
     };
 
     const bumpProject = (msg) => {
@@ -1573,9 +1646,11 @@
       const pct = document.getElementById("whqProjectPct");
       const steps = [...section.querySelectorAll("#whqPipeline span")];
       if (status && msg.includes("BUILD")) status.textContent = "BUILDING";
-      if (status && msg.includes("ARCHITECTURE")) status.textContent = "ARCHITECTING";
-      if (status && msg.includes("MARKET")) status.textContent = "GROWING";
-      if (status && msg.includes("OPERATIONS")) status.textContent = "OPERATING";
+      if (status && msg.includes("QA")) status.textContent = "TESTING";
+      if (status && msg.includes("RESEARCH")) status.textContent = "RESEARCHING";
+      if (status && (msg.includes("CAMPAIGN") || msg.includes("MARKET"))) status.textContent = "GROWING";
+      if (status && (msg.includes("BUDGET") || msg.includes("OPERATIONS"))) status.textContent = "OPERATING";
+      if (status && msg.includes("CHANGELOG")) status.textContent = "AUDITING";
       if (pct) {
         const n = Math.min(96, 58 + ((packetIndex * 7) % 38));
         pct.textContent = `${n}%`;
@@ -1621,11 +1696,11 @@
         packet.hidden = true;
       }, 1350);
       bumpProject(label);
-      if (label.includes("BUILD") && forgeBadge) {
-        forgeBadge.textContent = Math.random() > 0.4 ? "BUILD SUCCESS" : "BUILDING...";
+      if ((label.includes("QA") || label.includes("BUILD") || label.includes("TEST")) && forgeBadge) {
+        forgeBadge.textContent = Math.random() > 0.4 ? "QA PASSED" : "TESTING...";
         forgeBadge.classList.add("is-on");
         setTimeout(() => {
-          if (forgeBadge.textContent === "BUILDING...") forgeBadge.textContent = "BUILD SUCCESS";
+          if (forgeBadge.textContent === "TESTING...") forgeBadge.textContent = "QA PASSED";
         }, 700);
       }
     };
@@ -1660,10 +1735,12 @@
       const bases = {
         wide: { x: 0, y: 0, s: 1 },
         atlas: { x: 0, y: 18, s: 1.38 },
-        nova: { x: 22, y: 2, s: 1.4 },
-        vanta: { x: -22, y: 2, s: 1.4 },
+        nova: { x: 22, y: 6, s: 1.4 },
+        david: { x: 22, y: -10, s: 1.36 },
         forge: { x: 14, y: -16, s: 1.42 },
-        finn: { x: -14, y: -18, s: 1.42 },
+        vanta: { x: -22, y: 6, s: 1.4 },
+        finn: { x: -22, y: -10, s: 1.36 },
+        ledger: { x: -18, y: -14, s: 1.36 },
       };
       const b = bases[focus] || bases.wide;
       const rx = py * (selected ? 0.35 : 1.1);
@@ -1775,18 +1852,20 @@
       }
       if (phase >= 2) wake("atlas");
       if (phase >= 3) wake("nova");
-      if (phase >= 4) {
+      if (phase >= 4) wake("david");
+      if (phase >= 5) {
         wake("forge");
         setWorking("forge", true);
       }
-      if (phase >= 5) wake("vanta");
-      if (phase >= 6) wake("finn");
-      if (phase >= 7) {
+      if (phase >= 6) wake("vanta");
+      if (phase >= 7) wake("finn");
+      if (phase >= 8) wake("ledger");
+      if (phase >= 9) {
         section.classList.add("is-linked", "is-live");
         alive = true;
         if (!selected && !rm) scheduleActivity();
       }
-      if (phase >= 8) section.classList.add("is-climax");
+      if (phase >= 10) section.classList.add("is-climax");
     };
 
     // Default mobile focus
@@ -1851,20 +1930,20 @@
       const linkSt = ST.create({
         trigger: section,
         start: "center 55%",
-        onEnter: () => setPhase(7),
+        onEnter: () => setPhase(9),
       });
       sts.push(linkSt);
       const climaxSt = ST.create({
         trigger: "#whqClimax",
         start: "top 80%",
-        onEnter: () => setPhase(8),
+        onEnter: () => setPhase(10),
       });
       sts.push(climaxSt);
     } else {
       const io = new IntersectionObserver(
         ([entry]) => {
           if (!entry.isIntersecting) return;
-          setPhase(8);
+          setPhase(10);
           order.forEach(wake);
           section.classList.add("is-linked", "is-live", "is-climax");
           if (!rm) {
@@ -2005,7 +2084,7 @@
             if (screen) screen.textContent = screens[Math.min(3, Math.floor((self.progress * 20) % 4))];
           }
           if (idx === 2) {
-            const count = Math.min(5, Math.floor(((self.progress * services.length) % 1) * 6));
+            const count = Math.min(7, Math.floor(((self.progress * services.length) % 1) * 8));
             document.querySelectorAll(".mini-agent").forEach((a, i) => a.classList.toggle("is-on", i < count));
           }
         },

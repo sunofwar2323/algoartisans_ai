@@ -173,8 +173,8 @@
     <section class="seo-entity" aria-labelledby="about-entity">
       <h2 id="about-entity">Who is AlgoArtisans?</h2>
       <p>AlgoArtisans is an AI-native technology company. Human founders provide strategy, creativity and final
-        decisions. Specialized AI agents—ATLAS, NOVA, FORGE, VANTA and FINN—accelerate project management, architecture,
-        engineering, growth and operations.</p>
+        decisions. Specialized AI agents—ATLAS, NOVA, DAVID, FORGE, VINTA, FINN and LEDGER—accelerate project management,
+        engineering, research, QA, marketing, finance and audit.</p>
       <h2>Company principles</h2>
       <ul>
         <li><strong>Human Direction</strong> — people define the problem, strategy and vision.</li>
@@ -188,7 +188,7 @@
       <div class="section-intro">
         <p class="eyebrow">AI Workforce sample</p>
         <h2 class="sectionHeader">A glimpse inside the office.</h2>
-        <p class="sectionPara">A compact preview of the AlgoArtisans AI Office diorama—five agents collaborating on a
+        <p class="sectionPara">A compact preview of the AlgoArtisans AI Office diorama—seven agents collaborating on a
           live software pipeline. Open the full interactive experience on the AI Workforce page.</p>
         <a class="btn btn-primary" href="./workforce.html">Open full AI Office →</a>
       </div>
@@ -201,8 +201,8 @@
         <h2 class="sectionHeader">A team that never clocks out.</h2>
         <p class="sectionPara">AlgoArtisans combines human judgment with an AI-powered workforce designed to support
           every stage of building technology.</p>
-        <p class="sectionPara">Five specialized AI agents work across project management, architecture, engineering,
-          growth and operations—while our founders provide strategy, technical direction and final decisions.</p>
+        <p class="sectionPara">Seven specialized AI agents work across project management, engineering, research, QA,
+          marketing, finance and audit—while our founders provide strategy, technical direction and final decisions.</p>
         <p class="office-statement">Human direction.<br>AI execution.<br>Continuous operation.</p>
       </div>
 
@@ -279,12 +279,12 @@
               </button>
 
               <button type="button" class="desk desk--nova" data-agent="nova" data-cursor="VIEW"
-                aria-label="Nova, AI Systems Architect">
+                aria-label="Nova, AI Software Engineer">
                 <span class="desk-light"></span>
                 <div class="desk-surface"></div>
                 <div class="monitor">
                   <div class="screen screen--nova">
-                    <span>FRONTEND</span><b>↓</b><span>API</span><b>↓</b><span>DATABASE</span><b>↓</b><span>AUTH</span><b>↓</b><span>INFRA</span>
+                    <span>CODE</span><b>↓</b><span>BUILD</span><b>↓</b><span>APIS</span><b>↓</b><span>SHIP</span>
                     <div class="arch-pulse"></div>
                   </div>
                 </div>
@@ -297,14 +297,32 @@
                 <span class="desk-label">NOVA</span>
               </button>
 
+              <button type="button" class="desk desk--david" data-agent="david" data-cursor="VIEW"
+                aria-label="David, AI Researcher">
+                <span class="desk-light"></span>
+                <div class="desk-surface"></div>
+                <div class="monitor">
+                  <div class="screen screen--david">
+                    <span>RESEARCH</span><span>SOURCES</span><span>OPTIONS</span><span>TRADEOFFS</span>
+                  </div>
+                </div>
+                <div class="agent agent--david" aria-hidden="true">
+                  <div class="agent-head"><i></i></div>
+                  <div class="agent-body"></div>
+                  <div class="agent-arm agent-arm--l"></div>
+                  <div class="agent-arm agent-arm--r"></div>
+                </div>
+                <span class="desk-label">DAVID</span>
+              </button>
+
               <button type="button" class="desk desk--forge" data-agent="forge" data-cursor="VIEW"
-                aria-label="Forge, AI Software Engineer">
+                aria-label="Forge, AI QA / Tester">
                 <span class="desk-light"></span>
                 <div class="desk-surface"></div>
                 <div class="monitor">
                   <div class="screen screen--forge">
-                    <div class="code-lines"><span></span><span></span><span></span><span></span></div>
-                    <div class="build-badge" id="forgeBadge">BUILD</div>
+                    <span>TESTS</span><span>QA</span><span>BUGS</span><span>VERIFY</span>
+                    <div class="build-badge" id="forgeBadge">QA</div>
                   </div>
                 </div>
                 <div class="keyboard"></div>
@@ -318,12 +336,12 @@
               </button>
 
               <button type="button" class="desk desk--vanta" data-agent="vanta" data-cursor="VIEW"
-                aria-label="Vanta, AI Sales and Marketing">
+                aria-label="Vinta, AI Marketing Officer">
                 <span class="desk-light"></span>
                 <div class="desk-surface"></div>
                 <div class="monitor">
                   <div class="screen screen--vanta">
-                    <span>LEADS</span><span>PIPELINE</span>
+                    <span>CAMPAIGN</span><span>MESSAGING</span><span>GTM</span>
                     <div class="chart"><i></i><i></i><i></i><i></i><i></i></div>
                   </div>
                 </div>
@@ -333,16 +351,16 @@
                   <div class="agent-arm agent-arm--l"></div>
                   <div class="agent-arm agent-arm--r"></div>
                 </div>
-                <span class="desk-label">VANTA</span>
+                <span class="desk-label">VINTA</span>
               </button>
 
               <button type="button" class="desk desk--finn" data-agent="finn" data-cursor="VIEW"
-                aria-label="Finn, AI Finance and Operations">
+                aria-label="Finn, AI Finance Officer">
                 <span class="desk-light"></span>
                 <div class="desk-surface"></div>
                 <div class="monitor">
                   <div class="screen screen--finn">
-                    <span>REVENUE</span><span>EXPENSES</span><span>OPS</span>
+                    <span>BUDGET</span><span>FORECAST</span><span>PRICING</span>
                     <div class="fin-bars"><i></i><i></i><i></i></div>
                   </div>
                 </div>
@@ -354,6 +372,25 @@
                 </div>
                 <span class="desk-label">FINN</span>
               </button>
+
+              <button type="button" class="desk desk--ledger" data-agent="ledger" data-cursor="VIEW"
+                aria-label="Ledger, AI Auditor">
+                <span class="desk-light"></span>
+                <div class="desk-surface"></div>
+                <div class="monitor">
+                  <div class="screen screen--ledger">
+                    <span>CHANGELOG</span><span>DECISIONS</span><span>AUDITS</span><span>UPDATES</span>
+                  </div>
+                </div>
+                <div class="agent agent--ledger" aria-hidden="true">
+                  <div class="agent-head"><i></i></div>
+                  <div class="agent-body"></div>
+                  <div class="agent-arm agent-arm--l"></div>
+                  <div class="agent-arm agent-arm--r"></div>
+                </div>
+                <span class="desk-label">LEDGER</span>
+              </button>
+
 
               <div class="office-server" aria-hidden="true">
                 <i></i><i></i><i></i>
@@ -373,7 +410,7 @@
         </aside>
 
         <div class="workforce-moment" id="workforceMoment" aria-live="polite">
-          <span data-step="0">5 SPECIALISTS</span>
+          <span data-step="0">7 SPECIALISTS</span>
           <span data-step="1">ONE AI WORKFORCE</span>
           <span data-step="2">BUILT AROUND HUMAN DIRECTION</span>
           <span data-step="3" class="moment-tagline">Build. Automate. Scale.</span>
@@ -386,13 +423,17 @@
         <button type="button" class="office-mobile__desk" data-agent="atlas"><strong>ATLAS</strong><span>Project
             Management</span></button>
         <button type="button" class="office-mobile__desk"
-          data-agent="nova"><strong>NOVA</strong><span>Architecture</span></button>
+          data-agent="nova"><strong>NOVA</strong><span>Engineering</span></button>
         <button type="button" class="office-mobile__desk"
-          data-agent="forge"><strong>FORGE</strong><span>Engineering</span></button>
+          data-agent="david"><strong>DAVID</strong><span>Research</span></button>
         <button type="button" class="office-mobile__desk"
-          data-agent="vanta"><strong>VANTA</strong><span>Growth</span></button>
+          data-agent="forge"><strong>FORGE</strong><span>QA</span></button>
         <button type="button" class="office-mobile__desk"
-          data-agent="finn"><strong>FINN</strong><span>Operations</span></button>
+          data-agent="vanta"><strong>VINTA</strong><span>Marketing</span></button>
+        <button type="button" class="office-mobile__desk"
+          data-agent="finn"><strong>FINN</strong><span>Finance</span></button>
+        <button type="button" class="office-mobile__desk"
+          data-agent="ledger"><strong>LEDGER</strong><span>Audit</span></button>
       </div>
     </section>
 
