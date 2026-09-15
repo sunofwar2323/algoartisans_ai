@@ -1834,6 +1834,10 @@ footer {
   transition: transform 0.3s var(--ease), border-color 0.3s ease;
 }
 
+.founder-card[hidden] {
+  display: none !important;
+}
+
 .founder-card:hover {
   transform: translateY(-3px);
   border-color: rgba(56, 189, 248, 0.3);
