@@ -1433,6 +1433,11 @@
       mobileNav?.querySelectorAll("button").forEach((b) => b.classList.toggle("is-active", b.dataset.agent === key));
       section.querySelectorAll(".meet-a11y button").forEach((b) => b.classList.toggle("is-active", b.dataset.agent === key));
 
+      const activeDesk = section.querySelector(`.meet-desk[data-agent="${key}"]`);
+      if (activeDesk && !mqDesktop.matches) {
+        activeDesk.scrollIntoView({ behavior: rm ? "auto" : "smooth", inline: "center", block: "nearest" });
+      }
+
       if (dialog) {
         dialog.classList.add("is-open");
         const nameEl = document.getElementById("meetDialogName");

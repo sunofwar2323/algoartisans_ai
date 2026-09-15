@@ -351,10 +351,11 @@ body.has-custom-cursor button {
   margin: 0;
   flex: 0 0 auto;
   width: min(78vw, 280px);
-  min-height: 128px;
+  min-height: 112px;
+  max-height: 140px;
   display: grid;
   place-items: center;
-  padding: 1.15rem 1.4rem;
+  padding: 1rem 1.25rem;
   border-radius: 18px;
   border: 1px solid rgba(148, 163, 184, 0.16);
   background:
@@ -363,6 +364,7 @@ body.has-custom-cursor button {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition: border-color 0.3s ease, transform 0.35s var(--ease), box-shadow 0.35s ease;
+  overflow: hidden;
 }
 
 .partner-card:hover {
@@ -377,18 +379,20 @@ body.has-custom-cursor button {
 }
 
 .partner-card img {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
-  max-height: 88px;
+  max-height: 72px;
   object-fit: contain;
   display: block;
+  margin: 0 auto;
 }
 
 .partner-card:nth-child(3) img,
 .partner-card:nth-child(4) img,
 .partner-card:nth-child(7) img,
 .partner-card:nth-child(8) img {
-  max-height: 108px;
+  max-height: 84px;
 }
 
 @keyframes partnersMarquee {

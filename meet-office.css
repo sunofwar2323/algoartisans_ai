@@ -738,6 +738,18 @@
   font-style: italic;
 }
 
+/* Agents rail — absolute stage on desktop, carousel on mobile */
+.meet-agents-rail {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.meet-agents-rail .meet-desk {
+  pointer-events: auto;
+}
+
 /* Mobile */
 .meet-mobile-nav {
   display: none;
@@ -745,52 +757,222 @@
 
 @media (max-width: 899px) {
   .meet-office {
-    padding: 3.25rem 0 4rem;
+    padding: 2.75rem 0 3.25rem;
+    overflow-x: hidden;
+  }
+
+  .meet-office__intro {
+    width: min(92%, 640px);
+    margin: 0 auto 1.35rem;
+    text-align: left;
+  }
+
+  .meet-office__intro .sectionHeader {
+    margin-inline: 0;
+  }
+
+  .meet-office__support {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .meet-stage {
+    width: min(94%, 640px);
+  }
+
+  .meet-hud {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.65rem;
+  }
+
+  .meet-hud span:nth-child(2) {
+    opacity: 0.75;
   }
 
   .meet-viewport {
     aspect-ratio: auto;
-    min-height: 460px;
+    min-height: 0;
+    height: auto;
     perspective: none;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .meet-camera {
+    position: relative;
+    height: auto;
+    transform: none !important;
+    will-change: auto;
   }
 
   .meet-room {
-    transform: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    transform: none !important;
+    padding-bottom: 0.5rem;
   }
 
-  .meet-floor {
-    transform: none;
-    height: 55%;
-    left: 0;
-    right: 0;
+  .meet-wall {
+    position: relative;
+    inset: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding: 0.85rem 0.85rem 0.55rem;
+    min-height: 0;
+    background: transparent;
   }
 
-  .meet-wall { inset: 0 0 50% 0; }
+  .meet-wall__brand {
+    position: relative;
+    top: auto;
+    left: auto;
+    font-size: 1.05rem;
+    color: rgba(232, 238, 247, 0.7);
+  }
 
-  .meet-board,
-  .meet-whiteboard,
+  .meet-whiteboard {
+    position: static;
+    top: auto;
+    right: auto;
+    width: auto;
+    min-width: 0;
+    transform: none;
+    font-size: 0.58rem;
+    padding: 0.45rem 0.7rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .meet-floor,
   .meet-server,
   .meet-plant,
   .meet-cup,
-  .meet-bay {
+  .meet-bay,
+  .meet-packet {
+    display: none !important;
+  }
+
+  .meet-board {
+    position: relative;
+    left: auto;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: auto;
+    margin: 0 0.85rem 0.65rem;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .meet-board__title {
+    font-size: 0.62rem;
+  }
+
+  .meet-board__cols {
+    gap: 0.35rem;
+  }
+
+  .meet-board__cols div {
+    font-size: 0.58rem;
+    padding: 0.35rem 0.4rem;
+  }
+
+  /* Horizontal agent carousel */
+  .meet-agents-rail {
+    position: relative;
+    inset: auto;
+    display: flex;
+    align-items: stretch;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.35rem 0.85rem 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    pointer-events: auto;
+    mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+  }
+
+  .meet-agents-rail::-webkit-scrollbar {
     display: none;
   }
 
   .meet-desk {
-    position: absolute;
-    left: 50% !important;
-    top: 42% !important;
-    width: 58%;
-    min-width: 160px;
-    transform: translateX(-50%);
-    opacity: 0;
-    pointer-events: none;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    flex: 0 0 46%;
+    width: 46%;
+    min-width: 148px;
+    max-width: 180px;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    scroll-snap-align: center;
+    padding: 0.65rem 0.5rem 0.55rem;
+    border: 1px solid var(--navy-border);
+    border-radius: 14px;
+    background: rgba(13, 19, 32, 0.72);
   }
 
+  .meet-desk.is-selected,
   .meet-desk.is-mobile-active {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(-8px) scale(1.08);
+    border-color: rgba(34, 211, 238, 0.5);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 12px 28px rgba(0, 0, 0, 0.25);
+    transform: none !important;
+  }
+
+  .meet-room.is-dimmed .meet-desk:not(.is-selected) {
+    opacity: 0.55 !important;
+    filter: none !important;
+  }
+
+  .meet-hover-label {
+    display: none;
+  }
+
+  .meet-monitor {
+    width: 88%;
+    aspect-ratio: 5 / 3.6;
+  }
+
+  .meet-screen {
+    font-size: 0.48rem;
+    padding: 0.35rem;
+    gap: 0.12rem;
+  }
+
+  .meet-agent {
+    bottom: 24%;
+    width: 28px;
+    height: 40px;
+  }
+
+  .meet-nameplate {
+    font-size: 0.68rem;
+    margin-top: 0.45rem;
+    color: var(--white);
+  }
+
+  .meet-lamp {
+    display: none;
   }
 
   .meet-dialog {
@@ -798,29 +980,89 @@
     right: auto;
     bottom: auto;
     width: 100%;
-    margin-top: 0.85rem;
+    margin: 0;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    transform: none;
+    opacity: 0;
+    max-height: 0;
+    padding: 0 0.95rem;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s ease, max-height 0.45s var(--ease), padding 0.35s ease;
+  }
+
+  .meet-dialog.is-open {
+    opacity: 1;
+    max-height: 480px;
+    padding: 1rem 0.95rem 1.1rem;
+    pointer-events: auto;
   }
 
   .meet-mobile-nav {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.35rem;
-    margin-top: 0.85rem;
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.15rem;
+  }
+
+  .meet-mobile-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .meet-mobile-nav button {
-    min-height: 44px;
-    border-radius: 10px;
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
     border: 1px solid var(--navy-border);
     background: var(--navy-elevated);
     color: var(--muted);
     font-size: 0.62rem;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
   }
 
   .meet-mobile-nav button.is-active {
     color: var(--white);
-    border-color: rgba(34, 211, 238, 0.45);
+    border-color: rgba(34, 211, 238, 0.5);
+    background: rgba(34, 211, 238, 0.1);
+  }
+
+  .meet-hint {
+    font-size: 0.78rem;
+    margin-top: 0.75rem;
+    text-align: left;
+    padding-inline: 0;
+  }
+
+  .meet-hint::after {
+    content: " Swipe agents · tap to meet.";
+  }
+
+  .meet-a11y {
+    display: none;
+  }
+
+  .meet-copy {
+    width: min(92%, 640px);
+    margin-top: 1.75rem;
+    text-align: left;
+  }
+
+  .meet-copy .sectionHeader {
+    margin-inline: 0;
+  }
+
+  .meet-closer {
+    width: min(92%, 640px);
+    margin-top: 1.75rem;
+    text-align: left;
   }
 
   .meet-camera {

@@ -129,7 +129,79 @@ img {
   }
 
   .partners-section {
-    padding-top: 2.5rem;
+    padding: 2.5rem 0 2.75rem;
+    overflow-x: hidden;
+  }
+
+  .partners-header {
+    margin-bottom: 1.35rem;
+    text-align: left;
+  }
+
+  .partners-header .sectionHeader {
+    margin-inline: 0;
+    font-size: clamp(1.55rem, 7vw, 2rem);
+  }
+
+  .partners-support {
+    font-size: 0.92rem;
+  }
+
+  /* Stop marquee overflow — equal logo grid on phones */
+  .partners-rail {
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .partners-track {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+    transform: none;
+  }
+
+  .partner-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 96px;
+    height: 96px;
+    max-height: 96px;
+    padding: 0.75rem 0.85rem;
+    border-radius: 14px;
+    flex: none;
+  }
+
+  .partner-card[aria-hidden="true"] {
+    display: none;
+  }
+
+  .partner-card img {
+    width: 100%;
+    height: 100%;
+    max-height: 64px;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .partner-card:nth-child(3) img,
+  .partner-card:nth-child(4) img,
+  .partner-card:nth-child(7) img,
+  .partner-card:nth-child(8) img {
+    max-height: 64px;
+  }
+
+  .partner-card--light {
+    background: rgba(248, 250, 252, 0.94);
+    padding: 0.55rem 0.65rem;
+  }
+
+  .partner-card:hover {
+    transform: none;
   }
 
   .statement-line {
@@ -193,41 +265,17 @@ img {
 
   /* Meet office */
   .meet-office {
-    padding: 3rem 0 3.5rem;
+    padding: 2.75rem 0 3.25rem;
   }
 
   .meet-office__intro {
     width: min(92%, 640px);
-    margin-bottom: 1.5rem;
-  }
-
-  .meet-viewport {
-    min-height: 420px;
-    border-radius: var(--radius-lg);
-  }
-
-  .meet-hud {
-    font-size: 0.58rem;
-    gap: 0.4rem;
-  }
-
-  .meet-hint {
-    font-size: 0.8rem;
-    padding-inline: 0.5rem;
-  }
-
-  .meet-a11y {
-    gap: 0.4rem;
-  }
-
-  .meet-a11y button {
-    flex: 1 1 calc(50% - 0.4rem);
-    min-width: 0;
+    margin-bottom: 1.35rem;
   }
 
   .meet-copy {
     width: min(92%, 640px);
-    margin-top: 2rem;
+    margin-top: 1.75rem;
   }
 
   /* Workforce HQ */
