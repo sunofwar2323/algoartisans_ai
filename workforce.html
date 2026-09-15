@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="motion.css">
   <link rel="stylesheet" href="workforce-hq.css">
   <link rel="stylesheet" href="agent-roster.css">
+  <link rel="stylesheet" href="hxai.css">
   <link rel="stylesheet" href="responsive.css">
   <link rel="stylesheet" href="seo.css">
   <script src="https://kit.fontawesome.com/aa7454d09f.js" crossorigin="anonymous" defer></script>
@@ -650,23 +651,122 @@
       </div>
     </section>
 
-    <section class="section collab-section" id="human-ai">
-      <div class="section-intro">
-        <h2 class="sectionHeader">AI does the work.<br>Humans set the direction.</h2>
-        <p class="sectionPara">Founders provide strategy, technical leadership and final decisions—while the AI workforce amplifies execution.</p>
+    <section class="hxai-section" id="human-ai" aria-labelledby="hxaiHeading">
+      <div class="hxai-intro">
+        <h2 id="hxaiHeading" class="sectionHeader">AI does the work.<br>Humans set the direction.</h2>
+        <p class="hxai-lede">Founders provide strategy, technical leadership and final decisions—while the AI workforce amplifies execution.</p>
       </div>
-      <div class="collab-split is-merged" id="collabSplit">
-        <div class="collab-side collab-side--human">
-          <h3>HUMAN</h3>
-          <ul><li>Strategy</li><li>Judgment</li><li>Creativity</li><li>Decision</li></ul>
+
+      <div class="hxai-system" data-hxai data-phase="0" aria-label="Human and AI collaboration system">
+        <div class="hxai-system__grid" aria-hidden="true"></div>
+        <svg class="hxai-wires" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="hxaiWireGradW" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(34,211,238,0.05)"/>
+              <stop offset="50%" stop-color="rgba(56,189,248,0.45)"/>
+              <stop offset="100%" stop-color="rgba(34,211,238,0.05)"/>
+            </linearGradient>
+            <filter id="hxaiSoftGlowW" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g class="hxai-wires__base" fill="none" stroke="url(#hxaiWireGradW)" stroke-width="1.2">
+            <path class="hxai-wire" data-from="human" d="M170 280 C 320 280, 380 280, 500 280"/>
+            <path class="hxai-wire" data-from="ai" d="M830 280 C 680 280, 620 280, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="strategy" d="M155 120 C 280 140, 380 220, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="judgment" d="M155 200 C 290 210, 390 250, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="creativity" d="M155 360 C 290 350, 390 310, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="decision" d="M155 440 C 280 420, 380 340, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="research" d="M845 120 C 720 140, 620 220, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="execution" d="M845 200 C 710 210, 610 250, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="automation" d="M845 360 C 710 350, 610 310, 500 280"/>
+            <path class="hxai-wire hxai-wire--cap" data-cap="scale" d="M845 440 C 720 420, 620 340, 500 280"/>
+          </g>
+          <g class="hxai-wires__flow" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" filter="url(#hxaiSoftGlowW)">
+            <path class="hxai-flow-path" d=""/>
+          </g>
+          <circle class="hxai-packet" r="3.5" fill="var(--accent)" opacity="0"/>
+        </svg>
+
+        <div class="hxai-pole hxai-pole--human">
+          <button type="button" class="hxai-hub" data-hub="human" aria-pressed="false">
+            <span class="hxai-hub__ring" aria-hidden="true"></span>
+            <span class="hxai-hub__label">HUMAN</span>
+          </button>
+          <ul class="hxai-caps">
+            <li><button type="button" class="hxai-cap" data-cap="strategy" data-side="human"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Strategy</span></button></li>
+            <li><button type="button" class="hxai-cap" data-cap="judgment" data-side="human"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Judgment</span></button></li>
+            <li><button type="button" class="hxai-cap" data-cap="creativity" data-side="human"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Creativity</span></button></li>
+            <li><button type="button" class="hxai-cap" data-cap="decision" data-side="human"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Decision</span></button></li>
+          </ul>
         </div>
-        <div class="collab-center">
-          <span class="collab-brand">AlgoArtisans</span>
-          <p class="collab-formula">Human Judgment × AI Execution</p>
+
+        <div class="hxai-core" data-core>
+          <div class="hxai-core__aura" aria-hidden="true"></div>
+          <div class="hxai-core__orbit" aria-hidden="true"></div>
+          <div class="hxai-core__orbit hxai-core__orbit--slow" aria-hidden="true"></div>
+          <div class="hxai-core__node">
+            <span class="hxai-core__brand">AlgoArtisans</span>
+            <p class="hxai-core__formula">Human Judgment × AI Execution</p>
+          </div>
         </div>
-        <div class="collab-side collab-side--ai">
-          <h3>AI</h3>
-          <ul><li>Research</li><li>Execution</li><li>Automation</li><li>Scale</li></ul>
+
+        <div class="hxai-pole hxai-pole--ai">
+          <button type="button" class="hxai-hub" data-hub="ai" aria-pressed="false">
+            <span class="hxai-hub__ring" aria-hidden="true"></span>
+            <span class="hxai-hub__label">AI</span>
+          </button>
+          <ul class="hxai-caps">
+            <li><button type="button" class="hxai-cap" data-cap="research" data-side="ai"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Research</span></button></li>
+            <li><button type="button" class="hxai-cap" data-cap="execution" data-side="ai"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Execution</span></button></li>
+            <li><button type="button" class="hxai-cap" data-cap="automation" data-side="ai"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Automation</span></button></li>
+            <li><button type="button" class="hxai-cap" data-cap="scale" data-side="ai"><span class="hxai-cap__dot" aria-hidden="true"></span><span class="hxai-cap__name">Scale</span></button></li>
+          </ul>
+        </div>
+
+        <div class="hxai-detail" aria-live="polite">
+          <p class="hxai-detail__eyebrow">System link</p>
+          <p class="hxai-detail__title">Select a capability</p>
+          <p class="hxai-detail__text">Hover or click a capability to see how signals move through AlgoArtisans.</p>
+        </div>
+      </div>
+
+      <div class="hxai-mobile" data-hxai-mobile aria-label="Human and AI collaboration on mobile">
+        <div class="hxai-m-block hxai-m-block--human" data-m-phase="human">
+          <div class="hxai-m-hub">
+            <span class="hxai-m-hub__ring" aria-hidden="true"></span>
+            <span>HUMAN</span>
+          </div>
+          <ul class="hxai-m-caps">
+            <li><button type="button" class="hxai-m-cap" data-cap="strategy" data-side="human"><span>Strategy</span></button></li>
+            <li><button type="button" class="hxai-m-cap" data-cap="judgment" data-side="human"><span>Judgment</span></button></li>
+            <li><button type="button" class="hxai-m-cap" data-cap="creativity" data-side="human"><span>Creativity</span></button></li>
+            <li><button type="button" class="hxai-m-cap" data-cap="decision" data-side="human"><span>Decision</span></button></li>
+          </ul>
+        </div>
+        <div class="hxai-m-flow" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="hxai-m-core" data-m-phase="core">
+          <div class="hxai-m-core__aura" aria-hidden="true"></div>
+          <span class="hxai-m-core__brand">AlgoArtisans</span>
+          <p class="hxai-m-core__formula">Human Judgment × AI Execution</p>
+        </div>
+        <div class="hxai-m-flow" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="hxai-m-block hxai-m-block--ai" data-m-phase="ai">
+          <ul class="hxai-m-caps">
+            <li><button type="button" class="hxai-m-cap" data-cap="research" data-side="ai"><span>Research</span></button></li>
+            <li><button type="button" class="hxai-m-cap" data-cap="execution" data-side="ai"><span>Execution</span></button></li>
+            <li><button type="button" class="hxai-m-cap" data-cap="automation" data-side="ai"><span>Automation</span></button></li>
+            <li><button type="button" class="hxai-m-cap" data-cap="scale" data-side="ai"><span>Scale</span></button></li>
+          </ul>
+          <div class="hxai-m-hub hxai-m-hub--ai">
+            <span class="hxai-m-hub__ring" aria-hidden="true"></span>
+            <span>AI</span>
+          </div>
+        </div>
+        <div class="hxai-m-detail" aria-live="polite">
+          <p class="hxai-m-detail__title">Tap a capability</p>
+          <p class="hxai-m-detail__text">See how human direction and AI execution meet at AlgoArtisans.</p>
         </div>
       </div>
     </section>

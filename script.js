@@ -337,9 +337,114 @@
   ];
 
   const RING_LEN = 339.292;
+  const M_SIGNAL_RING = 326.726; // 2 * Math.PI * 52
   let engineIndex = 0;
   let signalIndex = 0;
   let engineSwapTimer = 0;
+
+  const syncMobileBuild = (index) => {
+    const s = services[index];
+    if (!s) return;
+    const hud = document.getElementById("mBuildHud");
+    const num = document.getElementById("mBuildNum");
+    const title = document.getElementById("mBuildTitle");
+    const sub = document.getElementById("mBuildSub");
+    const desc = document.getElementById("mBuildDesc");
+    const caps = document.getElementById("mBuildCaps");
+    const cta = document.getElementById("mBuildCta");
+    const card = document.getElementById("mBuildCard");
+    const screen = document.getElementById("mDeviceScreen");
+
+    if (hud) hud.textContent = `${s.num} / 0${services.length}`;
+    if (num) num.textContent = s.num;
+    if (title) title.textContent = s.title;
+    if (sub) sub.textContent = s.subtitle;
+    if (desc) desc.textContent = s.desc;
+    if (caps) {
+      caps.innerHTML = s.caps.slice(0, 4).map((c) => `<li>${c}</li>`).join("");
+    }
+    if (cta) {
+      cta.textContent = s.cta;
+      cta.setAttribute("href", "./start-project");
+    }
+    document.querySelectorAll("#mBuildChips .m-chip").forEach((btn, i) => {
+      btn.classList.toggle("is-active", i === index);
+      btn.setAttribute("aria-selected", String(i === index));
+    });
+    document.querySelectorAll("#mBuildDots button").forEach((btn, i) => {
+      btn.classList.toggle("is-active", i === index);
+    });
+    document.querySelectorAll("#mBuildCanvas .m-viz").forEach((v, i) => {
+      v.classList.toggle("is-active", i === index);
+    });
+    if (screen && index === 1) screen.textContent = "Web";
+    if (card && !reduceMotion) {
+      card.style.animation = "none";
+      void card.offsetWidth;
+      card.style.animation = "";
+    }
+  };
+
+  const syncMobileSignal = (index) => {
+    const stage = processStages[index];
+    if (!stage) return;
+    const hud = document.getElementById("mSignalHud");
+    const title = document.getElementById("mSignalTitle");
+    const desc = document.getElementById("mSignalDesc");
+    const meter = document.getElementById("mSignalMeter");
+    const ring = document.getElementById("mSignalRing");
+    const card = document.getElementById("mSignalCard");
+    const glyph = document.getElementById("mSignalGlyph");
+
+    if (hud) hud.textContent = `${stage.title.toUpperCase()} · ${index + 1}/${processStages.length}`;
+    if (title) title.textContent = stage.title;
+    if (desc) desc.textContent = stage.desc;
+    if (meter) meter.style.width = `${((index + 1) / processStages.length) * 100}%`;
+    if (ring) {
+      const progress = (index + 1) / processStages.length;
+      ring.style.strokeDashoffset = String(M_SIGNAL_RING * (1 - progress));
+    }
+    if (glyph) glyph.dataset.stage = String(index);
+    document.querySelectorAll("#mSignalChips .m-chip").forEach((btn, i) => {
+      btn.classList.toggle("is-active", i === index);
+      btn.setAttribute("aria-selected", String(i === index));
+    });
+    document.querySelectorAll("#mSignalDots button").forEach((btn, i) => {
+      btn.classList.toggle("is-active", i === index);
+    });
+    if (card && !reduceMotion) {
+      card.style.animation = "none";
+      void card.offsetWidth;
+      card.style.animation = "";
+    }
+  };
+
+  const bindSwipe = (el, onPrev, onNext) => {
+    if (!el) return;
+    let x0 = 0;
+    let y0 = 0;
+    el.addEventListener(
+      "touchstart",
+      (e) => {
+        const t = e.changedTouches[0];
+        x0 = t.clientX;
+        y0 = t.clientY;
+      },
+      { passive: true }
+    );
+    el.addEventListener(
+      "touchend",
+      (e) => {
+        const t = e.changedTouches[0];
+        const dx = t.clientX - x0;
+        const dy = t.clientY - y0;
+        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx < 0) onNext();
+        else onPrev();
+      },
+      { passive: true }
+    );
+  };
 
   const setEngineService = (index, { fromUser = false } = {}) => {
     const s = services[index];
@@ -388,9 +493,10 @@
         document.querySelectorAll(".mini-agent").forEach((a) => a.classList.add("is-on"));
       }
       panel?.classList.remove("is-swap");
+      syncMobileBuild(index);
     };
 
-    if (fromUser && panel && !reduceMotion) {
+    if (fromUser && panel && !reduceMotion && mqDesktop.matches) {
       panel.classList.add("is-swap");
       window.clearTimeout(engineSwapTimer);
       engineSwapTimer = window.setTimeout(apply, 160);
@@ -406,17 +512,16 @@
 
     const section = document.querySelector(".signal-console") || document.getElementById("process");
     const focus = document.getElementById("signalFocus");
-    const idxEl = document.getElementById("signalIndex");
     const titleEl = document.getElementById("signalTitle");
     const descEl = document.getElementById("signalDesc");
     const meter = document.getElementById("signalMeter");
     const ring = document.getElementById("signalRingProgress");
     const hud = document.getElementById("signalHudStage");
     const railFill = document.getElementById("signalRailFill");
+    const glyph = document.getElementById("signalGlyph");
     const nodes = [...document.querySelectorAll(".signal-node")];
 
     const apply = () => {
-      if (idxEl) idxEl.textContent = stage.num;
       if (titleEl) titleEl.textContent = stage.title;
       if (descEl) descEl.textContent = stage.desc;
       if (meter) meter.style.width = `${((index + 1) / processStages.length) * 100}%`;
@@ -424,9 +529,10 @@
         const progress = (index + 1) / processStages.length;
         ring.style.strokeDashoffset = String(RING_LEN * (1 - progress));
       }
-      if (hud) hud.textContent = `STAGE ${stage.num} / 0${processStages.length}`;
+      if (hud) hud.textContent = `${stage.title.toUpperCase()} · ${index + 1}/${processStages.length}`;
       if (railFill) railFill.style.width = `${((index + 1) / processStages.length) * 100}%`;
       if (section) section.dataset.signalIndex = String(index);
+      if (glyph) glyph.dataset.stage = String(index);
 
       nodes.forEach((node, i) => {
         node.classList.toggle("is-active", i === index);
@@ -439,14 +545,15 @@
       });
 
       const activeNode = nodes[index];
-      if (activeNode && typeof activeNode.scrollIntoView === "function") {
+      if (activeNode && mqDesktop.matches && typeof activeNode.scrollIntoView === "function") {
         activeNode.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
       }
 
       focus?.classList.remove("is-swap");
+      syncMobileSignal(index);
     };
 
-    if (fromUser && focus && !reduceMotion) {
+    if (fromUser && focus && !reduceMotion && mqDesktop.matches) {
       focus.classList.add("is-swap");
       window.setTimeout(apply, 140);
     } else {
@@ -497,24 +604,81 @@
   setEngineService(0);
   setSignalStage(0);
 
-  // Mobile stacked services (no scrubbing)
-  const engineMobile = document.getElementById("engineMobile");
-  if (engineMobile) {
-    engineMobile.innerHTML = services
-      .map(
-        (s) => `
-      <article class="engine-mobile-card">
-        <span class="engine-num">${s.num}</span>
-        <h3 class="engine-title">${s.title}</h3>
-        <p class="engine-subtitle">${s.subtitle}</p>
-        <p class="engine-desc">${s.desc}</p>
-        <ul class="capability-list build-caps">${s.caps.map((c) => `<li>${c}</li>`).join("")}</ul>
-        ${s.highlight ? `<p class="service-highlight">${s.highlight}</p>` : ""}
-        <a class="btn btn-primary" href="./start-project.html">${s.cta}</a>
-      </article>`
-      )
-      .join("");
+  // Mobile compact workflow controls
+  const mBuildChips = document.getElementById("mBuildChips");
+  const mBuildDots = document.getElementById("mBuildDots");
+  const mSignalChips = document.getElementById("mSignalChips");
+  const mSignalDots = document.getElementById("mSignalDots");
+  const shortLabels = ["Systems", "Apps", "Agents", "Intel", "AI Sys"];
+
+  if (mBuildChips && mBuildDots) {
+    services.forEach((s, i) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = `m-chip${i === 0 ? " is-active" : ""}`;
+      chip.dataset.module = String(i);
+      chip.setAttribute("role", "tab");
+      chip.setAttribute("aria-selected", String(i === 0));
+      chip.textContent = shortLabels[i] || s.title;
+      chip.addEventListener("click", () => setEngineService(i, { fromUser: true }));
+      mBuildChips.appendChild(chip);
+
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = i === 0 ? "is-active" : "";
+      dot.setAttribute("aria-label", `Module ${i + 1}`);
+      dot.addEventListener("click", () => setEngineService(i, { fromUser: true }));
+      mBuildDots.appendChild(dot);
+    });
   }
+
+  if (mSignalChips && mSignalDots) {
+    processStages.forEach((s, i) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = `m-chip${i === 0 ? " is-active" : ""}`;
+      chip.dataset.stage = String(i);
+      chip.setAttribute("role", "tab");
+      chip.setAttribute("aria-selected", String(i === 0));
+      chip.textContent = s.title;
+      chip.addEventListener("click", () => setSignalStage(i, { fromUser: true }));
+      mSignalChips.appendChild(chip);
+
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = i === 0 ? "is-active" : "";
+      dot.setAttribute("aria-label", `Stage ${i + 1}`);
+      dot.addEventListener("click", () => setSignalStage(i, { fromUser: true }));
+      mSignalDots.appendChild(dot);
+    });
+  }
+
+  document.getElementById("mBuildPrev")?.addEventListener("click", () => {
+    setEngineService((engineIndex - 1 + services.length) % services.length, { fromUser: true });
+  });
+  document.getElementById("mBuildNext")?.addEventListener("click", () => {
+    setEngineService((engineIndex + 1) % services.length, { fromUser: true });
+  });
+  document.getElementById("mSignalPrev")?.addEventListener("click", () => {
+    setSignalStage((signalIndex - 1 + processStages.length) % processStages.length, { fromUser: true });
+  });
+  document.getElementById("mSignalNext")?.addEventListener("click", () => {
+    setSignalStage((signalIndex + 1) % processStages.length, { fromUser: true });
+  });
+
+  bindSwipe(document.getElementById("mBuildFlow"), () => {
+    setEngineService((engineIndex - 1 + services.length) % services.length, { fromUser: true });
+  }, () => {
+    setEngineService((engineIndex + 1) % services.length, { fromUser: true });
+  });
+  bindSwipe(document.getElementById("mSignalFlow"), () => {
+    setSignalStage((signalIndex - 1 + processStages.length) % processStages.length, { fromUser: true });
+  }, () => {
+    setSignalStage((signalIndex + 1) % processStages.length, { fromUser: true });
+  });
+
+  syncMobileBuild(0);
+  syncMobileSignal(0);
 
   /* =========================================================
      Hero canvas — quality scaled, pause when offscreen
@@ -2117,6 +2281,540 @@
   };
 
   /* =========================================================
+     Human × AI constellation
+     ========================================================= */
+  const HXAI_COPY = {
+    strategy: {
+      title: "Strategy",
+      side: "human",
+      text: "Direction before code—defining what matters, why it matters, and the path worth taking.",
+    },
+    judgment: {
+      title: "Judgment",
+      side: "human",
+      text: "Knowing what to build, what to cut, and which trade-offs protect the outcome.",
+    },
+    creativity: {
+      title: "Creativity",
+      side: "human",
+      text: "Novel solutions where playbooks fall short—taste, intuition and original thinking.",
+    },
+    decision: {
+      title: "Decision",
+      side: "human",
+      text: "Final calls AI can inform but never own. Accountability stays human.",
+    },
+    research: {
+      title: "Research",
+      side: "ai",
+      text: "Rapid synthesis across markets, users, codebases and constraints—at machine speed.",
+    },
+    execution: {
+      title: "Execution",
+      side: "ai",
+      text: "Engineering velocity with rigor—turning architecture into working systems.",
+    },
+    automation: {
+      title: "Automation",
+      side: "ai",
+      text: "Repeatable workflows that compound—so the team ships more without growing headcount.",
+    },
+    scale: {
+      title: "Scale",
+      side: "ai",
+      text: "Capacity that expands with demand—systems designed to grow, not bottleneck.",
+    },
+    human: {
+      title: "Human direction",
+      side: "human",
+      text: "Strategy, judgment, creativity and decision—the compass AlgoArtisans steers by.",
+    },
+    ai: {
+      title: "AI execution",
+      side: "ai",
+      text: "Research, execution, automation and scale—the force that multiplies a small team.",
+    },
+  };
+
+  const initHxaiSystem = ({ ScrollTrigger: ST, reduceMotion: rm, onCleanup: cleanup, scrollTriggers: sts } = {}) => {
+    const section = document.getElementById("human-ai");
+    if (!section || section.dataset.hxaiReady === "1") return;
+    section.dataset.hxaiReady = "1";
+
+    const system = section.querySelector("[data-hxai]");
+    const mobile = section.querySelector("[data-hxai-mobile]");
+    const detailTitle = system?.querySelector(".hxai-detail__title");
+    const detailText = system?.querySelector(".hxai-detail__text");
+    const detailEyebrow = system?.querySelector(".hxai-detail__eyebrow");
+    const mTitle = mobile?.querySelector(".hxai-m-detail__title");
+    const mText = mobile?.querySelector(".hxai-m-detail__text");
+    const packet = system?.querySelector(".hxai-packet");
+
+    let signalTimer = 0;
+    let packetRaf = 0;
+
+    const setDetail = (key, mobileOnly = false) => {
+      const copy = HXAI_COPY[key];
+      if (!copy) return;
+      if (!mobileOnly && detailTitle && detailText) {
+        if (detailEyebrow) {
+          detailEyebrow.textContent = copy.side === "human" ? "Human → AlgoArtisans" : "AlgoArtisans → AI";
+        }
+        detailTitle.textContent = copy.title;
+        detailText.textContent = copy.text;
+      }
+      if (mTitle && mText) {
+        mTitle.textContent = copy.title;
+        mText.textContent = copy.text;
+      }
+    };
+
+    const clearActiveCaps = (root) => {
+      root?.querySelectorAll(".hxai-cap.is-active, .hxai-m-cap.is-active, .hxai-hub.is-lit").forEach((el) => {
+        el.classList.remove("is-active", "is-lit");
+        if (el.hasAttribute("aria-pressed")) el.setAttribute("aria-pressed", "false");
+      });
+      system?.querySelectorAll(".hxai-wire.is-active").forEach((w) => w.classList.remove("is-active"));
+    };
+
+    const runPacketAlong = (pathEl, { duration = 720, reverse = false } = {}) =>
+      new Promise((resolve) => {
+        if (!packet || !pathEl || rm) {
+          resolve();
+          return;
+        }
+        cancelAnimationFrame(packetRaf);
+        const len = pathEl.getTotalLength();
+        packet.setAttribute("opacity", "1");
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          const dist = reverse ? (1 - eased) * len : eased * len;
+          const pt = pathEl.getPointAtLength(dist);
+          packet.setAttribute("cx", String(pt.x));
+          packet.setAttribute("cy", String(pt.y));
+          if (t < 1) {
+            packetRaf = requestAnimationFrame(tick);
+          } else {
+            packet.setAttribute("opacity", "0");
+            resolve();
+          }
+        };
+        packetRaf = requestAnimationFrame(tick);
+      });
+
+    const signalCap = async (capKey, side) => {
+      if (!system) return;
+      clearTimeout(signalTimer);
+      clearActiveCaps(system);
+      clearActiveCaps(mobile);
+
+      const wire = system.querySelector(`.hxai-wire[data-cap="${capKey}"]`);
+      const trunkOut = system.querySelector(`.hxai-wire[data-from="${side === "human" ? "ai" : "human"}"]`);
+      const capBtn = system.querySelector(`.hxai-cap[data-cap="${capKey}"]`);
+      const mCap = mobile?.querySelector(`.hxai-m-cap[data-cap="${capKey}"]`);
+      const hubIn = system.querySelector(`.hxai-hub[data-hub="${side}"]`);
+      const hubOut = system.querySelector(`.hxai-hub[data-hub="${side === "human" ? "ai" : "human"}"]`);
+
+      capBtn?.classList.add("is-active");
+      mCap?.classList.add("is-active");
+      hubIn?.classList.add("is-lit");
+      wire?.classList.add("is-active");
+      system.classList.add("is-signaling");
+      mobile?.classList.add("is-signaling");
+      setDetail(capKey);
+
+      if (wire) await runPacketAlong(wire, { duration: 680 });
+      if (trunkOut) {
+        trunkOut.classList.add("is-active");
+        await runPacketAlong(trunkOut, { duration: 520, reverse: true });
+        hubOut?.classList.add("is-lit");
+      }
+
+      signalTimer = window.setTimeout(() => {
+        system.classList.remove("is-signaling");
+        mobile?.classList.remove("is-signaling");
+      }, 1600);
+    };
+
+    // Desktop interactions
+    system?.querySelectorAll(".hxai-cap").forEach((btn) => {
+      const key = btn.getAttribute("data-cap");
+      const side = btn.getAttribute("data-side");
+      const activate = () => signalCap(key, side);
+      btn.addEventListener("mouseenter", activate);
+      btn.addEventListener("focus", activate);
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        activate();
+      });
+    });
+
+    system?.querySelectorAll(".hxai-hub").forEach((btn) => {
+      const hub = btn.getAttribute("data-hub");
+      const activate = () => {
+        clearActiveCaps(system);
+        btn.classList.add("is-lit");
+        btn.setAttribute("aria-pressed", "true");
+        system.classList.add("is-signaling");
+        const wire = system.querySelector(`.hxai-wire[data-from="${hub}"]`);
+        wire?.classList.add("is-active");
+        setDetail(hub);
+        if (wire) runPacketAlong(wire, { duration: 700 });
+        clearTimeout(signalTimer);
+        signalTimer = window.setTimeout(() => system.classList.remove("is-signaling"), 1200);
+      };
+      btn.addEventListener("mouseenter", activate);
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        activate();
+      });
+    });
+
+    // Mobile taps
+    mobile?.querySelectorAll(".hxai-m-cap").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-cap");
+        clearActiveCaps(mobile);
+        btn.classList.add("is-active");
+        mobile.classList.add("is-signaling");
+        setDetail(key, true);
+        clearTimeout(signalTimer);
+        signalTimer = window.setTimeout(() => mobile.classList.remove("is-signaling"), 1400);
+      });
+    });
+
+    // Scroll reveal phases
+    const setPhase = (n) => {
+      if (system) system.setAttribute("data-phase", String(n));
+      if (n >= 1) mobile?.classList.add("is-alive");
+    };
+
+    if (rm) {
+      setPhase(4);
+      return;
+    }
+
+    if (ST && typeof ST.create === "function") {
+      const phases = [
+        { start: "top 75%", phase: 1 },
+        { start: "top 58%", phase: 2 },
+        { start: "top 42%", phase: 3 },
+        { start: "top 28%", phase: 4 },
+      ];
+      phases.forEach(({ start, phase }) => {
+        const st = ST.create({
+          trigger: section,
+          start,
+          onEnter: () => setPhase(phase),
+          onLeaveBack: () => setPhase(Math.max(0, phase - 1)),
+        });
+        sts?.push(st);
+      });
+    } else {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          setPhase(1);
+          window.setTimeout(() => setPhase(2), 280);
+          window.setTimeout(() => setPhase(3), 560);
+          window.setTimeout(() => setPhase(4), 840);
+          io.disconnect();
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+      );
+      io.observe(section);
+      cleanup?.(() => io.disconnect());
+    }
+
+    cleanup?.(() => {
+      clearTimeout(signalTimer);
+      cancelAnimationFrame(packetRaf);
+    });
+  };
+
+  /* =========================================================
+     What is AlgoArtisans? showcase
+     ========================================================= */
+  const AA_CAPS = {
+    build: {
+      title: "Build",
+      text: "Websites, applications and software systems engineered around your ambition.",
+    },
+    automate: {
+      title: "Automate",
+      text: "AI agents and an AI workforce that accelerate research, delivery and operations.",
+    },
+    research: {
+      title: "Research",
+      text: "Business intelligence and research systems that turn signal into strategy.",
+    },
+    scale: {
+      title: "Scale",
+      text: "Automation and digital transformation designed to grow with demand—not headcount.",
+    },
+  };
+
+  const AA_AGENTS = {
+    atlas: {
+      title: "ATLAS",
+      text: "Coordinates timelines, priorities and delivery across the AI workforce.",
+    },
+    nova: {
+      title: "NOVA",
+      text: "Owns technical architecture and engineering decisions at execution speed.",
+    },
+    david: {
+      title: "DAVID",
+      text: "Researches markets, users and constraints before a single system is built.",
+    },
+    forge: {
+      title: "FORGE",
+      text: "Turns architecture into working product—code, interfaces and integrations.",
+    },
+    vinta: {
+      title: "VINTA",
+      text: "Shapes narrative, positioning and go-to-market signal around the product.",
+    },
+    finn: {
+      title: "FINN",
+      text: "Validates quality, reliability and edge cases before anything ships.",
+    },
+    ledger: {
+      title: "LEDGER",
+      text: "Tracks cost, runway and operational finance for the system as it scales.",
+    },
+  };
+
+  const initAaShowcase = ({ ScrollTrigger: ST, reduceMotion: rm, onCleanup: cleanup, scrollTriggers: sts } = {}) => {
+    const root = document.querySelector("[data-aa-show]");
+    if (!root || root.dataset.aaReady === "1") return;
+    root.dataset.aaReady = "1";
+
+    const core = root.querySelector("[data-aa-core]");
+    const coreM = root.querySelector("[data-aa-core-m]");
+    const net = root.querySelector("[data-aa-net]");
+    const netM = root.querySelector("[data-aa-net-m]");
+    const flow = root.querySelector("[data-aa-flow]");
+    const dna = root.querySelector("[data-aa-dna]");
+
+    let timer = 0;
+    let packetRaf = 0;
+
+    const runAlong = (packet, pathEl, { duration = 650, reverse = false } = {}) =>
+      new Promise((resolve) => {
+        if (!packet || !pathEl || rm) {
+          resolve();
+          return;
+        }
+        cancelAnimationFrame(packetRaf);
+        const len = pathEl.getTotalLength();
+        packet.setAttribute("opacity", "1");
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const e = 1 - Math.pow(1 - t, 3);
+          const dist = reverse ? (1 - e) * len : e * len;
+          const pt = pathEl.getPointAtLength(dist);
+          packet.setAttribute("cx", String(pt.x));
+          packet.setAttribute("cy", String(pt.y));
+          if (t < 1) packetRaf = requestAnimationFrame(tick);
+          else {
+            packet.setAttribute("opacity", "0");
+            resolve();
+          }
+        };
+        packetRaf = requestAnimationFrame(tick);
+      });
+
+    /* Core capabilities */
+    const setCoreDetail = (key) => {
+      const copy = AA_CAPS[key];
+      if (!copy) return;
+      const dTitle = core?.querySelector(".aa-core__detail-title");
+      const dText = core?.querySelector(".aa-core__detail-text");
+      const mTitle = coreM?.querySelector(".aa-core-m__detail-title");
+      const mText = coreM?.querySelector(".aa-core-m__detail-text");
+      if (dTitle) dTitle.textContent = copy.title;
+      if (dText) dText.textContent = copy.text;
+      if (mTitle) mTitle.textContent = copy.title;
+      if (mText) mText.textContent = copy.text;
+    };
+
+    const signalCap = async (key) => {
+      setCoreDetail(key);
+      core?.querySelectorAll(".aa-cap").forEach((el) => el.classList.toggle("is-active", el.dataset.aaCap === key));
+      coreM?.querySelectorAll(".aa-core-m__cap").forEach((el) => el.classList.toggle("is-active", el.dataset.aaCap === key));
+      core?.querySelectorAll(".aa-core__wire").forEach((w) => w.classList.toggle("is-active", w.dataset.cap === key));
+      core?.classList.add("is-signaling");
+      const wire = core?.querySelector(`.aa-core__wire[data-cap="${key}"]`);
+      const packet = core?.querySelector(".aa-core__packet");
+      if (wire) await runAlong(packet, wire, { duration: 580, reverse: true });
+      clearTimeout(timer);
+      timer = window.setTimeout(() => core?.classList.remove("is-signaling"), 900);
+    };
+
+    core?.querySelectorAll("[data-aa-cap]").forEach((btn) => {
+      const key = btn.getAttribute("data-aa-cap");
+      const go = () => signalCap(key);
+      btn.addEventListener("mouseenter", go);
+      btn.addEventListener("focus", go);
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        go();
+      });
+    });
+    coreM?.querySelectorAll("[data-aa-cap]").forEach((btn) => {
+      btn.addEventListener("click", () => signalCap(btn.getAttribute("data-aa-cap")));
+    });
+
+    /* DNA tabs */
+    dna?.querySelectorAll(".aa-dna__tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const id = tab.getAttribute("data-dna");
+        dna.querySelectorAll(".aa-dna__tab").forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle("is-active", on);
+          t.setAttribute("aria-selected", String(on));
+        });
+        dna.querySelectorAll(".aa-dna__panel").forEach((panel) => {
+          const on = panel.getAttribute("data-dna-panel") === id;
+          panel.classList.toggle("is-active", on);
+          panel.hidden = !on;
+        });
+      });
+    });
+
+    /* Workforce network */
+    const setAgentDetail = (key) => {
+      const copy = AA_AGENTS[key];
+      if (!copy) return;
+      const pTitle = net?.querySelector(".aa-net__panel-title");
+      const pText = net?.querySelector(".aa-net__panel-text");
+      const mTitle = netM?.querySelector(".aa-net-m__panel-title");
+      const mText = netM?.querySelector(".aa-net-m__panel-text");
+      if (pTitle) pTitle.textContent = copy.title;
+      if (pText) pText.textContent = copy.text;
+      if (mTitle) mTitle.textContent = copy.title;
+      if (mText) mText.textContent = copy.text;
+    };
+
+    const signalAgent = async (key) => {
+      setAgentDetail(key);
+      net?.querySelectorAll(".aa-agent").forEach((el) => el.classList.toggle("is-active", el.dataset.agent === key));
+      netM?.querySelectorAll("button[data-agent]").forEach((el) => el.classList.toggle("is-active", el.dataset.agent === key));
+      net?.querySelectorAll(".aa-net__links line").forEach((line) => line.classList.toggle("is-active", line.dataset.agent === key));
+      net?.classList.add("is-signaling");
+      const line = net?.querySelector(`.aa-net__links line[data-agent="${key}"]`);
+      const packet = net?.querySelector(".aa-net__packet");
+      // Approximate path via temporary path from line coords
+      if (line && packet && !rm) {
+        const x1 = +line.getAttribute("x1");
+        const y1 = +line.getAttribute("y1");
+        const x2 = +line.getAttribute("x2");
+        const y2 = +line.getAttribute("y2");
+        const svg = line.ownerSVGElement;
+        let temp = svg?.querySelector(".aa-net__temp-path");
+        if (!temp && svg) {
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          temp.setAttribute("class", "aa-net__temp-path");
+          temp.setAttribute("fill", "none");
+          temp.style.display = "none";
+          svg.appendChild(temp);
+        }
+        if (temp) {
+          temp.setAttribute("d", `M${x1} ${y1} L${x2} ${y2}`);
+          await runAlong(packet, temp, { duration: 520 });
+        }
+      }
+      clearTimeout(timer);
+      timer = window.setTimeout(() => net?.classList.remove("is-signaling"), 1000);
+    };
+
+    net?.querySelectorAll(".aa-agent").forEach((btn) => {
+      const key = btn.getAttribute("data-agent");
+      const go = () => signalAgent(key);
+      btn.addEventListener("mouseenter", go);
+      btn.addEventListener("focus", go);
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        go();
+      });
+    });
+    netM?.querySelectorAll("button[data-agent]").forEach((btn) => {
+      btn.addEventListener("click", () => signalAgent(btn.getAttribute("data-agent")));
+    });
+
+    /* Scroll activations */
+    const wakeCore = () => core?.classList.add("is-alive");
+    const setFlow = (n) => flow?.setAttribute("data-flow-phase", String(n));
+
+    if (rm) {
+      wakeCore();
+      setFlow(4);
+      return;
+    }
+
+    if (ST && typeof ST.create === "function") {
+      const stCore = ST.create({
+        trigger: root,
+        start: "top 72%",
+        once: true,
+        onEnter: wakeCore,
+      });
+      sts?.push(stCore);
+
+      if (flow) {
+        [1, 2, 3, 4].forEach((phase) => {
+          const st = ST.create({
+            trigger: flow,
+            start: `top ${78 - phase * 10}%`,
+            onEnter: () => setFlow(phase),
+            onLeaveBack: () => setFlow(Math.max(0, phase - 1)),
+          });
+          sts?.push(st);
+        });
+      }
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            if (entry.target === core || entry.target === root) wakeCore();
+            if (entry.target === flow) {
+              setFlow(1);
+              window.setTimeout(() => setFlow(2), 260);
+              window.setTimeout(() => setFlow(3), 520);
+              window.setTimeout(() => setFlow(4), 780);
+            }
+          });
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
+      );
+      if (core) io.observe(core);
+      else io.observe(root);
+      if (flow) io.observe(flow);
+      if (coreM) {
+        const ioM = new IntersectionObserver(
+          ([e]) => {
+            if (e.isIntersecting) wakeCore();
+          },
+          { threshold: 0.15 }
+        );
+        ioM.observe(coreM);
+        cleanup?.(() => ioM.disconnect());
+      }
+      cleanup?.(() => io.disconnect());
+    }
+
+    cleanup?.(() => {
+      clearTimeout(timer);
+      cancelAnimationFrame(packetRaf);
+    });
+  };
+
+  /* =========================================================
      Motion system (Lenis desktop-only + GSAP)
      ========================================================= */
   let lenis = null;
@@ -2191,6 +2889,8 @@
         canDesktopFX,
       });
       initAgentRoster();
+      initHxaiSystem({ reduceMotion, onCleanup });
+      initAaShowcase({ reduceMotion, onCleanup });
       return;
     }
 
@@ -2286,14 +2986,8 @@
     });
 
     initAgentRoster();
-
-    const collabSt = ScrollTrigger.create({
-      trigger: "#human-ai",
-      start: "top 60%",
-      onEnter: () => document.getElementById("collabSplit")?.classList.add("is-merged"),
-      onLeaveBack: () => document.getElementById("collabSplit")?.classList.remove("is-merged"),
-    });
-    scrollTriggers.push(collabSt);
+    initHxaiSystem({ ScrollTrigger, reduceMotion, onCleanup, scrollTriggers });
+    initAaShowcase({ ScrollTrigger, reduceMotion, onCleanup, scrollTriggers });
 
     const ctaSt = ScrollTrigger.create({
       trigger: "#cta",

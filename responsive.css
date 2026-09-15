@@ -114,9 +114,22 @@ img {
     line-height: 1.35;
   }
 
-  /* Cinematic intro */
+  /* Cinematic intro — no tall empty scroll gap on phones */
   .cinematic-intro {
-    padding: 3rem 0;
+    min-height: 0;
+    padding: 2.75rem 0 2.25rem;
+  }
+
+  .cinematic-intro .sys-labels {
+    display: none;
+  }
+
+  .cinematic-intro__inner {
+    padding-bottom: 0;
+  }
+
+  .partners-section {
+    padding-top: 2.5rem;
   }
 
   .statement-line {
@@ -141,15 +154,7 @@ img {
     display: none;
   }
 
-  /* Collab */
-  .collab-split {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .collab-center {
-    order: -1;
-  }
+  /* Collab — handled in hxai.css */
 
   /* Workforce teaser */
   .workforce-teaser__grid {
