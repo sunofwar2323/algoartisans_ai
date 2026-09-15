@@ -18,18 +18,30 @@
       ]
     },
     {
-      "source": "/(robots\\.txt|sitemap\\.xml)",
+      "source": "/robots.txt",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
       ]
     }
   ],
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/home", "destination": "/", "permanent": true },
-    { "source": "/ai-workforce", "destination": "/workforce", "permanent": false },
-    { "source": "/about", "destination": "/aboutus", "permanent": false },
-    { "source": "/start-a-project", "destination": "/start-project", "permanent": false },
-    { "source": "/project", "destination": "/start-project", "permanent": false }
+    { "source": "/workforce.html", "destination": "/workforce", "permanent": true },
+    { "source": "/aboutus.html", "destination": "/aboutus", "permanent": true },
+    { "source": "/contact.html", "destination": "/contact", "permanent": true },
+    { "source": "/start-project.html", "destination": "/start-project", "permanent": true },
+    { "source": "/ai-workforce", "destination": "/workforce", "permanent": true },
+    { "source": "/about", "destination": "/aboutus", "permanent": true },
+    { "source": "/start-a-project", "destination": "/start-project", "permanent": true },
+    { "source": "/project", "destination": "/start-project", "permanent": true }
   ]
 }

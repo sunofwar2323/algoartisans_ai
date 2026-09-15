@@ -326,9 +326,28 @@
     },
   };
 
-  const setEngineService = (index) => {
+  const processStages = [
+    { num: "01", title: "Discover", desc: "Understand the problem, opportunity and desired outcome." },
+    { num: "02", title: "Research", desc: "Investigate market, users, technology and constraints." },
+    { num: "03", title: "Architect", desc: "Design product, system architecture and technical strategy." },
+    { num: "04", title: "Build", desc: "Human + AI engineering turns architecture into technology." },
+    { num: "05", title: "Test", desc: "Validate performance, security, usability and reliability." },
+    { num: "06", title: "Deploy", desc: "Launch and establish production infrastructure." },
+    { num: "07", title: "Evolve", desc: "Improve continuously from real-world data and feedback." },
+  ];
+
+  const RING_LEN = 339.292;
+  let engineIndex = 0;
+  let signalIndex = 0;
+  let engineSwapTimer = 0;
+
+  const setEngineService = (index, { fromUser = false } = {}) => {
     const s = services[index];
     if (!s) return;
+    engineIndex = index;
+
+    const section = document.querySelector(".build-console") || document.getElementById("services");
+    const panel = document.getElementById("engineCopy");
     const num = document.getElementById("engineNum");
     const title = document.getElementById("engineTitle");
     const subtitle = document.getElementById("engineSubtitle");
@@ -336,20 +355,102 @@
     const caps = document.getElementById("engineCaps");
     const highlight = document.getElementById("engineHighlight");
     const cta = document.getElementById("engineCta");
-    if (num) num.textContent = s.num;
-    if (title) title.textContent = s.title;
-    if (subtitle) subtitle.textContent = s.subtitle;
-    if (desc) desc.textContent = s.desc;
-    if (caps) caps.innerHTML = s.caps.map((c) => `<li>${c}</li>`).join("");
-    if (highlight) {
-      highlight.hidden = !s.highlight;
-      highlight.textContent = s.highlight || "";
+    const hudModule = document.getElementById("buildHudModule");
+    const progressFill = document.getElementById("engineProgressFill");
+    const moduleGlow = document.getElementById("buildModuleGlow");
+
+    const apply = () => {
+      if (num) num.textContent = s.num;
+      if (title) title.textContent = s.title;
+      if (subtitle) subtitle.textContent = s.subtitle;
+      if (desc) desc.textContent = s.desc;
+      if (caps) caps.innerHTML = s.caps.map((c) => `<li>${c}</li>`).join("");
+      if (highlight) {
+        highlight.hidden = !s.highlight;
+        highlight.textContent = s.highlight || "";
+      }
+      if (cta) cta.textContent = s.cta;
+      if (hudModule) hudModule.textContent = `MODULE ${s.num} / 0${services.length}`;
+      if (progressFill) progressFill.style.width = `${((index + 1) / services.length) * 100}%`;
+      if (section) section.dataset.buildIndex = String(index);
+
+      document.querySelectorAll(".viz").forEach((v, i) => v.classList.toggle("is-active", i === index));
+      document.querySelectorAll("#engineDots button").forEach((b, i) => b.classList.toggle("is-active", i === index));
+      document.querySelectorAll(".build-module").forEach((btn) => {
+        const on = Number(btn.dataset.module) === index;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-pressed", String(on));
+      });
+      if (moduleGlow) {
+        moduleGlow.style.transform = `translateX(calc(${index} * (100% + 0.45rem)))`;
+      }
+      if (index === 2) {
+        document.querySelectorAll(".mini-agent").forEach((a) => a.classList.add("is-on"));
+      }
+      panel?.classList.remove("is-swap");
+    };
+
+    if (fromUser && panel && !reduceMotion) {
+      panel.classList.add("is-swap");
+      window.clearTimeout(engineSwapTimer);
+      engineSwapTimer = window.setTimeout(apply, 160);
+    } else {
+      apply();
     }
-    if (cta) cta.textContent = s.cta;
-    document.querySelectorAll(".viz").forEach((v, i) => v.classList.toggle("is-active", i === index));
-    document.querySelectorAll("#engineDots button").forEach((b, i) => b.classList.toggle("is-active", i === index));
-    if (index === 2) {
-      document.querySelectorAll(".mini-agent").forEach((a) => a.classList.add("is-on"));
+  };
+
+  const setSignalStage = (index, { fromUser = false } = {}) => {
+    const stage = processStages[index];
+    if (!stage) return;
+    signalIndex = index;
+
+    const section = document.querySelector(".signal-console") || document.getElementById("process");
+    const focus = document.getElementById("signalFocus");
+    const idxEl = document.getElementById("signalIndex");
+    const titleEl = document.getElementById("signalTitle");
+    const descEl = document.getElementById("signalDesc");
+    const meter = document.getElementById("signalMeter");
+    const ring = document.getElementById("signalRingProgress");
+    const hud = document.getElementById("signalHudStage");
+    const railFill = document.getElementById("signalRailFill");
+    const nodes = [...document.querySelectorAll(".signal-node")];
+
+    const apply = () => {
+      if (idxEl) idxEl.textContent = stage.num;
+      if (titleEl) titleEl.textContent = stage.title;
+      if (descEl) descEl.textContent = stage.desc;
+      if (meter) meter.style.width = `${((index + 1) / processStages.length) * 100}%`;
+      if (ring) {
+        const progress = (index + 1) / processStages.length;
+        ring.style.strokeDashoffset = String(RING_LEN * (1 - progress));
+      }
+      if (hud) hud.textContent = `STAGE ${stage.num} / 0${processStages.length}`;
+      if (railFill) railFill.style.width = `${((index + 1) / processStages.length) * 100}%`;
+      if (section) section.dataset.signalIndex = String(index);
+
+      nodes.forEach((node, i) => {
+        node.classList.toggle("is-active", i === index);
+        node.classList.toggle("is-done", i < index);
+        node.setAttribute("aria-selected", String(i === index));
+      });
+
+      document.querySelectorAll(".pipeline-stage-card").forEach((card, i) => {
+        card.classList.toggle("is-active", i === index);
+      });
+
+      const activeNode = nodes[index];
+      if (activeNode && typeof activeNode.scrollIntoView === "function") {
+        activeNode.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+      }
+
+      focus?.classList.remove("is-swap");
+    };
+
+    if (fromUser && focus && !reduceMotion) {
+      focus.classList.add("is-swap");
+      window.setTimeout(apply, 140);
+    } else {
+      apply();
     }
   };
 
@@ -359,11 +460,42 @@
       const b = document.createElement("button");
       b.type = "button";
       b.setAttribute("aria-label", `Service ${i + 1}`);
-      b.addEventListener("click", () => setEngineService(i));
+      b.addEventListener("click", () => setEngineService(i, { fromUser: true }));
       dots.appendChild(b);
     });
   }
+
+  document.getElementById("engineModules")?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".build-module");
+    if (!btn) return;
+    setEngineService(Number(btn.dataset.module), { fromUser: true });
+  });
+
+  document.querySelector(".signal-rail")?.addEventListener("click", (e) => {
+    const node = e.target.closest(".signal-node");
+    if (!node) return;
+    setSignalStage(Number(node.dataset.stage), { fromUser: true });
+  });
+
+  // Pointer glow on build visual
+  const buildViz = document.getElementById("engineVisual");
+  const buildPointer = document.getElementById("buildPointerGlow");
+  if (buildViz && buildPointer && !reduceMotion) {
+    const onMove = (e) => {
+      const rect = buildViz.getBoundingClientRect();
+      buildPointer.style.left = `${e.clientX - rect.left}px`;
+      buildPointer.style.top = `${e.clientY - rect.top}px`;
+      buildViz.classList.add("is-tracking");
+    };
+    buildViz.addEventListener("pointermove", onMove);
+    buildViz.addEventListener("pointerleave", () => buildViz.classList.remove("is-tracking"));
+    onCleanup(() => {
+      buildViz.removeEventListener("pointermove", onMove);
+    });
+  }
+
   setEngineService(0);
+  setSignalStage(0);
 
   // Mobile stacked services (no scrubbing)
   const engineMobile = document.getElementById("engineMobile");
@@ -376,9 +508,9 @@
         <h3 class="engine-title">${s.title}</h3>
         <p class="engine-subtitle">${s.subtitle}</p>
         <p class="engine-desc">${s.desc}</p>
-        <ul class="capability-list">${s.caps.map((c) => `<li>${c}</li>`).join("")}</ul>
+        <ul class="capability-list build-caps">${s.caps.map((c) => `<li>${c}</li>`).join("")}</ul>
         ${s.highlight ? `<p class="service-highlight">${s.highlight}</p>` : ""}
-        <a class="text-link" href="./start-project.html">${s.cta}</a>
+        <a class="btn btn-primary" href="./start-project.html">${s.cta}</a>
       </article>`
       )
       .join("");
@@ -1303,7 +1435,8 @@
      ========================================================= */
   const initAgentRoster = () => {
     const section = document.getElementById("agent-roster");
-    if (!section) return;
+    if (!section || section.dataset.rosterReady === "1") return;
+    section.dataset.rosterReady = "1";
 
     const cards = [...section.querySelectorAll(".roster-card")];
     const filters = [...section.querySelectorAll("[data-roster-filter]")];
@@ -1387,6 +1520,10 @@
       });
       renderInspector(card);
 
+      if (inspector && !mqDesktop.matches) {
+        inspector.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+      }
+
       // Soft-link to HQ zones if present
       const key = card.dataset.agent;
       const zone = document.querySelector(`.whq-zone[data-agent="${key}"]`);
@@ -1431,7 +1568,7 @@
         return;
       }
       const card = e.target.closest(".roster-card");
-      if (card && !card.classList.contains("is-dimmed")) selectCard(card);
+      if (card) selectCard(card);
     });
 
     section.addEventListener("keydown", (e) => {
@@ -1439,7 +1576,7 @@
       if (!card) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        if (!card.classList.contains("is-dimmed")) selectCard(card);
+        selectCard(card);
       }
     });
 
@@ -2032,7 +2169,8 @@
 
     if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined" || reduceMotion) {
       document.querySelectorAll(".statement-word").forEach((w) => w.classList.add("is-aligned"));
-      document.querySelectorAll(".pipeline-stage").forEach((s) => s.classList.add("is-active"));
+      document.querySelectorAll(".pipeline-stage-card").forEach((s) => s.classList.add("is-active"));
+      setSignalStage(0);
       initAiOffice({
         reduceMotion,
         agents,
@@ -2052,6 +2190,7 @@
         quality,
         canDesktopFX,
       });
+      initAgentRoster();
       return;
     }
 
@@ -2077,7 +2216,7 @@
         scrub: true,
         onUpdate: (self) => {
           const idx = Math.min(services.length - 1, Math.floor(self.progress * services.length));
-          setEngineService(idx);
+          if (idx !== engineIndex) setEngineService(idx);
           if (idx === 1) {
             const screens = ["Web", "Mobile", "Dashboard", "Product"];
             const screen = document.getElementById("deviceScreen");
@@ -2092,31 +2231,27 @@
       scrollTriggers.push(st);
     }
 
-    // Pipeline horizontal — desktop; vertical CSS on mobile
-    const pipelineTrack = document.getElementById("pipelineTrack");
-    const pipelineSignal = document.getElementById("pipelineSignal");
-    const stages = gsap.utils.toArray(".pipeline-stage");
-    if (pipelineTrack && canDesktopFX()) {
-      const tween = gsap.to(pipelineTrack, {
-        x: () => -(pipelineTrack.scrollWidth - window.innerWidth * 0.45),
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".pipeline-section",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.8,
-          onUpdate: (self) => {
-            if (pipelineSignal) {
-              pipelineSignal.style.transform = `translate3d(${self.progress * 100}%, 0, 0)`;
-            }
-            const active = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
-            stages.forEach((s, i) => s.classList.toggle("is-active", i === active));
-          },
+    // Signal path scrub — desktop; mobile uses stacked cards
+    const stages = gsap.utils.toArray(".signal-node");
+    if (stages.length && canDesktopFX()) {
+      const st = ScrollTrigger.create({
+        trigger: ".pipeline-section",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.65,
+        onUpdate: (self) => {
+          const active = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
+          if (active !== signalIndex) setSignalStage(active);
+          const signal = document.getElementById("pipelineSignal");
+          if (signal) signal.style.transform = `translate3d(${self.progress * 100}%, 0, 0)`;
         },
       });
-      scrollTriggers.push(tween.scrollTrigger);
+      scrollTriggers.push(st);
     } else {
-      stages.forEach((s) => s.classList.add("is-active"));
+      document.querySelectorAll(".pipeline-stage-card").forEach((s) => s.classList.add("is-active"));
+      document.querySelectorAll(".signal-node").forEach((s, i) => {
+        s.classList.toggle("is-active", i === 0);
+      });
     }
 
     // AI Office
@@ -2191,9 +2326,17 @@
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initMotion, { once: true });
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        initMotion();
+        initAgentRoster();
+      },
+      { once: true }
+    );
   } else {
     initMotion();
+    initAgentRoster();
   }
 
   /* =========================================================

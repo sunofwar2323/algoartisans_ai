@@ -35,22 +35,22 @@
 .navLogo img,
 .brand-logo {
   width: auto;
-  height: 52px;
-  max-width: 168px;
+  height: 64px;
+  max-width: 64px;
   object-fit: contain;
 }
 
 .footerAboutus .brand-logo,
 .footerAboutus img.brand-logo {
   width: auto;
-  height: 72px;
-  max-width: 220px;
+  height: auto;
+  max-width: 148px;
   margin-bottom: 1rem;
 }
 
 .hero-logo {
   width: 100%;
-  max-width: 520px;
+  max-width: 420px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 24px 48px rgba(14, 165, 233, 0.28));
@@ -58,7 +58,7 @@
 
 .about-logo {
   width: 100%;
-  max-width: 420px;
+  max-width: 320px;
   height: auto;
   margin-inline: auto;
   object-fit: contain;
@@ -1818,7 +1818,9 @@ footer {
 
 @media (min-width: 700px) {
   .founders-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 720px;
+    margin-inline: auto;
   }
 }
 

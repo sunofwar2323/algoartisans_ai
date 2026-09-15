@@ -254,6 +254,8 @@
 .roster-card:nth-child(3) { animation-delay: 0.15s; --accent-local: #2dd4bf; }
 .roster-card:nth-child(4) { animation-delay: 0.2s; --accent-local: #67e8f9; }
 .roster-card:nth-child(5) { animation-delay: 0.25s; --accent-local: #34d399; }
+.roster-card:nth-child(6) { animation-delay: 0.3s; --accent-local: #fbbf24; }
+.roster-card:nth-child(7) { animation-delay: 0.35s; --accent-local: #94a3b8; }
 
 @keyframes roster-card-in {
   from {
@@ -308,7 +310,6 @@
   opacity: 0.38;
   filter: grayscale(0.35);
   transform: none;
-  pointer-events: none;
 }
 
 .roster-card__top {

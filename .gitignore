@@ -1,0 +1,18 @@
+# Local-only site status (do not push)
+websiteStatus.md
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor / local env
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs & temp
+*.log
+.cache/
+tmp/
+temp/

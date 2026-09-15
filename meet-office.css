@@ -278,11 +278,65 @@
   font-weight: 700;
 }
 
-/* Workstations */
+/* Vertical bay guides behind each desk */
+.meet-bay {
+  position: absolute;
+  top: 18%;
+  bottom: 8%;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(148, 163, 184, 0.22) 18%,
+    rgba(34, 211, 238, 0.28) 50%,
+    rgba(148, 163, 184, 0.18) 82%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+  transform: translateX(-50%);
+}
+
+.meet-bay::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 3px;
+  height: 18%;
+  margin-left: -1.5px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.55), transparent);
+  animation: meetBayScan 3.8s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.meet-bay--atlas { left: 8%; animation-delay: 0s; }
+.meet-bay--nova { left: 22%; }
+.meet-bay--david { left: 36%; }
+.meet-bay--forge { left: 50%; }
+.meet-bay--vanta { left: 64%; }
+.meet-bay--finn { left: 78%; }
+.meet-bay--ledger { left: 92%; }
+
+.meet-bay--nova::after { animation-delay: 0.4s; }
+.meet-bay--david::after { animation-delay: 0.8s; }
+.meet-bay--forge::after { animation-delay: 1.2s; }
+.meet-bay--vanta::after { animation-delay: 1.6s; }
+.meet-bay--finn::after { animation-delay: 2s; }
+.meet-bay--ledger::after { animation-delay: 2.4s; }
+
+@keyframes meetBayScan {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(280%); opacity: 0.9; }
+}
+
+/* Workstations — centered on bay X so the U-arc never clips */
 .meet-desk {
   position: absolute;
-  width: 17%;
-  min-width: 92px;
+  width: 12%;
+  min-width: 78px;
+  max-width: 118px;
   border: 0;
   background: transparent;
   color: inherit;
@@ -290,6 +344,7 @@
   cursor: pointer;
   z-index: 5;
   text-align: center;
+  transform: translateX(-50%);
   transition: filter 0.35s ease, opacity 0.35s ease, transform 0.45s var(--ease);
   -webkit-tap-highlight-color: transparent;
 }
@@ -306,7 +361,7 @@
 
 .meet-desk.is-selected {
   z-index: 8;
-  transform: translateY(-6px) scale(1.05);
+  transform: translateX(-50%) translateY(-8px) scale(1.06);
 }
 
 .meet-desk:hover .meet-chair,
@@ -482,14 +537,14 @@
   50% { transform: rotate(6deg); }
 }
 
-/* Natural desk placement — seven specialists */
-.meet-desk--atlas { left: 2%; top: 44%; }
-.meet-desk--nova { left: 16%; top: 52%; }
-.meet-desk--david { left: 30%; top: 56%; }
-.meet-desk--forge { left: 44%; top: 57%; }
-.meet-desk--vanta { left: 58%; top: 53%; }
-.meet-desk--finn { left: 72%; top: 47%; }
-.meet-desk--ledger { left: 86%; top: 42%; }
+/* U-arc desk placement — outer high, center low (matches production mock) */
+.meet-desk--atlas { left: 8%; top: 34%; }
+.meet-desk--nova { left: 22%; top: 46%; }
+.meet-desk--david { left: 36%; top: 55%; }
+.meet-desk--forge { left: 50%; top: 58%; }
+.meet-desk--vanta { left: 64%; top: 55%; }
+.meet-desk--finn { left: 78%; top: 46%; }
+.meet-desk--ledger { left: 92%; top: 34%; }
 
 .meet-lamp {
   position: absolute;
@@ -716,7 +771,8 @@
   .meet-whiteboard,
   .meet-server,
   .meet-plant,
-  .meet-cup {
+  .meet-cup,
+  .meet-bay {
     display: none;
   }
 

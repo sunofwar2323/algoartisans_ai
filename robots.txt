@@ -1,8 +1,11 @@
 User-agent: *
 Allow: /
 
-# Disallow non-public / utility paths if added later
-Disallow: /Team/
-Disallow: /*.md$
-
+# Prefer clean URLs (Vercel cleanUrls). HTML extensions still resolve.
 Sitemap: https://www.algoartisans.com/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
